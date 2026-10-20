@@ -32,8 +32,8 @@ export const tools = [
     name: 'Portfolio Pilot',
     subtitle: '资产配置与再平衡',
     description: '记录持仓与目标比例，规划新增资金分配，查看整体资产的压力情景。',
-    status: 'development' as 'development' | 'available',
-    url: '' as string,
+    status: 'available' as 'development' | 'available',
+    url: 'https://cznail.github.io/portfolio-pilot/' as string,
     features: ['持仓管理', '定投规划', '只买入再平衡', '情景压力测试'],
   },
 ];
