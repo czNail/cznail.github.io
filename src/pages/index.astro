@@ -3,6 +3,15 @@ import Layout from '../components/Layout.astro';
 import Icon from '../components/Icon.astro';
 import { profile, projects, tools } from '../data/site';
 import { posts } from '../data/posts';
+import snapshot from '../data/repositories.json';
+import { rankRepositories } from '../lib/recommendations.mjs';
+const recommended = rankRepositories(snapshot.repositories).slice(0,3);
+const date = (value:string) => new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit'}).format(new Date(value));
+const display = (repo:(typeof recommended)[number]) => {
+  const project=projects.find(item => item.url.toLowerCase()===repo.url.toLowerCase());
+  const tool=tools.find(item => item.repository===repo.name && item.status==='available');
+  return {name:tool?.name ?? project?.name ?? repo.name,description:tool?.description ?? project?.description ?? repo.description,url:tool?.url ?? repo.url,icon:tool?'grid':project?.icon ?? 'code'};
+};
 ---
 <Layout>
   <main id="main" class="wrap">
@@ -10,12 +19,12 @@ import { posts } from '../data/posts';
       <div class="hero-copy">
         <p class="eyebrow"><span class="tiny-line"></span> NEIL CHEN / PERSONAL SPACE</p>
         <h1 id="intro">我是木匠钉子<span class="english">(Neil Chen)</span></h1>
-        <div class="hero-links"><a class="button primary" href={profile.blog}>阅读博客 <Icon name="right" size={18}/></a><a class="text-link" href="#projects">查看项目 <Icon name="right" size={17}/></a></div>
+        <div class="hero-links"><a class="button primary" href="#projects">浏览项目 <Icon name="right" size={18}/></a><a class="text-link" href={profile.blog}>阅读博客 <Icon name="right" size={17}/></a></div>
       </div>
-      <aside class="launchpad" aria-label="直接打开工具与项目">
-        <p class="eyebrow">工具与项目 / QUICK ACCESS</p>
-        {tools.filter(tool => tool.status === 'available' && tool.url).map(tool => <a class="tool-launch" href={tool.url}><span class="launch-icon"><Icon name="grid" size={24}/></span><span><strong>仓位助手</strong><small>看大类比例，安排定投与再平衡</small></span><Icon name="right" size={21}/></a>)}
-        <div class="project-shortcuts">{projects.map(project => <a href={project.url}><Icon name={project.icon} size={19}/><span><strong>{project.name}</strong><small>{project.label}</small></span><Icon name="arrow" size={16}/></a>)}</div>
+      <aside class="recommendations" aria-labelledby="recommendations-title">
+        <div class="recommendation-heading"><h2 id="recommendations-title">值得一看</h2><span>关注度与近期维护</span></div>
+        <div class="recommendation-list">{recommended.length===0 && <p class="recommendation-empty">暂时没有可推荐的公开项目。<a href={profile.github}>去 GitHub 看看 →</a></p>}{recommended.map((repo,index) => {const item=display(repo);return <a class:list={['recommendation',{featured:index===0}]} href={item.url}><span class="recommendation-icon"><Icon name={item.icon} size={21}/></span><span class="recommendation-copy"><strong>{item.name}</strong><span class="recommendation-description">{item.description}</span><small>{repo.stars>0 && <span>☆ {repo.stars}</span>}{repo.lastCommitAt && <time datetime={repo.lastCommitAt}>{date(repo.lastCommitAt)} 更新</time>}{repo.recentCommits>0 && <span>近 30 天 {repo.recentCommits}{repo.recentCommits>=20?'+':''} 次提交</span>}</small></span><Icon name="arrow" size={17}/></a>;})}</div>
+        <p class="recommendation-note">每日同步 GitHub<span>数据更新于 {date(snapshot.fetchedAt)}</span></p>
       </aside>
     </section>
 
@@ -24,13 +33,14 @@ import { posts } from '../data/posts';
       <div class="project-grid">{projects.map(project => <a class="project-card" href={project.url}><div class="card-top"><span class="project-icon"><Icon name={project.icon} size={24}/></span><span class="card-kind">{project.label}</span><Icon name="arrow" size={20}/></div><h3>{project.name}</h3><p>{project.description}</p><ul class="tags" aria-label="项目技术标签">{project.tags.map(tag => <li>{tag}</li>)}</ul></a>)}</div>
     </section>
 
-    <section class="section tools-section" id="tools" aria-labelledby="tools-title">
-      <div class="section-heading"><div><p class="eyebrow">02 / TOOLS</p><h2 id="tools-title">顺手的小工具</h2></div><span class="section-note">从实际需要出发</span></div>
-      {tools.map(tool => <article class="tool-card"><div class="tool-copy"><div class="tool-label"><Icon name="grid" size={18}/><span>PERSONAL UTILITY</span><span class:list={['status', { ready: tool.status === 'available' }]}><i></i>{tool.status === 'available' ? '已发布' : '开发中'}</span></div><h3>{tool.name}</h3><p class="tool-subtitle">{tool.subtitle}</p><p class="tool-description">{tool.description}</p><ul class="tool-features">{tool.features.map(feature => <li>{feature}</li>)}</ul>{tool.status === 'available' && tool.url ? <a class="button primary" href={tool.url}>打开工具 <Icon name="right" size={18}/></a> : <p class="tool-pending">正在打磨，完成后在这里见。</p>}</div><div class="tool-art" aria-hidden="true"><div class="mini-window"><div class="window-dots"><i></i><i></i><i></i><span>PORTFOLIO</span></div><div class="allocation"><div class="ring"></div><div class="mini-bars"><b></b><b></b><b></b></div></div><div class="mini-rule"></div><div class="mini-columns"><span></span><span></span><span></span><span></span><span></span><span></span></div></div><span class="art-caption">界面概念示意</span></div></article>)}
-    </section>
     <section class="writing section" id="writing" aria-labelledby="writing-title">
-      <div class="section-heading"><div><p class="eyebrow">03 / WRITING</p><h2 id="writing-title">写下思考</h2></div><a class="text-link" href={profile.blog}>全部文章 <Icon name="arrow" size={16}/></a></div>
+      <div class="section-heading"><div><p class="eyebrow">02 / WRITING</p><h2 id="writing-title">写下思考</h2></div><a class="text-link" href={profile.blog}>全部文章 <Icon name="arrow" size={16}/></a></div>
       <div class="post-list">{posts.map((post, index) => <a class="post" href={post.url}><span class="post-index">0{index + 1}</span><div class="post-content"><div class="post-meta"><span>{post.category}</span><time datetime={post.date}>{post.date.replaceAll('-', '.')}</time></div><h3>{post.title}</h3><p>{post.description}</p></div><span class="post-arrow"><Icon name="arrow" size={22}/></span></a>)}</div>
+    </section>
+
+    <section class="section tools-section" id="tools" aria-labelledby="tools-title">
+      <div class="section-heading"><div><p class="eyebrow">03 / TOOLS</p><h2 id="tools-title">顺手的小工具</h2></div><span class="section-note">从实际需要出发</span></div>
+      <div class="tools-grid">{tools.map(tool => <article class="utility-card"><div class="utility-heading"><span class="utility-icon"><Icon name="grid" size={23}/></span><span class:list={['status',{ready:tool.status==='available'}]}><i></i>{tool.status==='available'?'可使用':'开发中'}</span></div><h3>{tool.name}</h3><p class="utility-subtitle">{tool.subtitle}</p><p>{tool.description}</p><ul class="tool-features">{tool.features.map(feature => <li>{feature}</li>)}</ul>{tool.status==='available' && tool.url ? <a class="button primary" href={tool.url}>打开工具 <Icon name="right" size={17}/></a> : <p class="tool-pending">正在打磨，完成后在这里见。</p>}</article>)}</div>
     </section>
 
     <div class="end-note"><span class="tiny-line"></span><p>思考留在文字里，想法落在代码中。</p></div>

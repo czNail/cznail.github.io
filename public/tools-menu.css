@@ -1,0 +1,11 @@
+.tools-menu{position:relative;color:inherit;font:inherit}
+.tools-menu>summary{display:flex;align-items:center;gap:5px;min-height:36px;cursor:pointer;list-style:none;border-radius:6px;padding:3px 7px;margin-inline:-7px;white-space:nowrap}
+.tools-menu>summary::-webkit-details-marker{display:none}.tools-menu>summary::after{content:'';width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-2px) rotate(45deg);margin-left:3px;transition:transform .15s}
+.tools-menu[open]>summary,.tools-menu>summary:hover{color:var(--accent);background:var(--soft,var(--site-accent-soft))}.tools-menu[open]>summary::after{transform:translateY(1px) rotate(225deg)}
+.tools-popover{position:absolute;right:0;top:calc(100% + 10px);width:300px;max-width:calc(100vw - 40px);padding:7px;border:1px solid var(--line,var(--border));border-radius:10px;background:var(--card,var(--background));color:var(--text,var(--foreground));box-shadow:0 12px 35px #10283d18;z-index:40;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.tools-menu .tools-popover a{display:block;white-space:normal;border-radius:6px;padding:12px;text-decoration:none;text-align:left;line-height:1.65;min-width:0}
+.tools-menu .tools-popover a:hover{background:var(--soft,var(--site-accent-soft));color:var(--accent)}
+.tools-popover strong{display:block;font-size:14px;font-weight:600}.tools-popover small{display:block;font-size:12px;color:var(--menu-muted,#65717c);margin-top:4px;overflow-wrap:anywhere}
+.tools-menu .tools-popover>a{font-size:12px;color:var(--menu-muted,#65717c);border-top:1px solid var(--line,var(--border));border-radius:0;margin-top:4px;padding-block:10px}
+@media(max-width:700px){nav:has(>.tools-menu){position:relative}.tools-menu{position:static}.tools-popover{left:0;right:0;top:calc(100% + 8px);width:auto;max-width:none}.tools-menu>summary{padding-inline:6px;margin-inline:-6px}}
+@media(prefers-reduced-motion:reduce){.tools-menu>summary::after{transition:none}}

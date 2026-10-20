@@ -1,0 +1,10 @@
+---
+import { tools } from '../data/site';
+---
+<details class="tools-menu">
+  <summary>小工具</summary>
+  <div class="tools-popover">
+    <div data-tools-list>{tools.filter(tool => tool.status === 'available' && tool.url).map(tool => <a href={tool.url}><strong>{tool.name}</strong><small>{tool.description}</small></a>)}</div>
+    <a href="/#tools">查看全部小工具 →</a>
+  </div>
+</details>

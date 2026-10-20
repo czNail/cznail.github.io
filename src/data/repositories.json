@@ -1,0 +1,60 @@
+{
+  "fetchedAt": "2026-10-20T14:45:37.397Z",
+  "repositories": [
+    {
+      "name": "code-mate",
+      "url": "https://github.com/czNail/code-mate",
+      "description": "Code companion skill for understanding code, discussing system design, and reviewing implementation plans and changes.",
+      "language": null,
+      "stars": 0,
+      "lastCommitAt": "2026-09-17T06:12:13Z",
+      "recentCommitDates": [
+        "2026-09-17T06:12:13Z",
+        "2026-09-17T05:55:16Z",
+        "2026-09-08T05:35:42Z",
+        "2026-09-04T08:18:14Z",
+        "2026-09-04T08:15:17Z",
+        "2026-09-04T08:15:10Z",
+        "2026-09-04T08:14:59Z",
+        "2026-09-04T08:14:47Z",
+        "2026-09-04T08:14:34Z",
+        "2026-09-04T08:14:16Z"
+      ]
+    },
+    {
+      "name": "GMKit",
+      "url": "https://github.com/czNail/GMKit",
+      "description": "A lightweight command-line toolkit for Chinese commercial cryptography workflows.",
+      "language": "Python",
+      "stars": 0,
+      "lastCommitAt": "2026-05-08T02:24:14Z",
+      "recentCommitDates": [
+        "2026-05-08T02:24:14Z",
+        "2026-05-08T01:21:28Z",
+        "2026-05-08T01:15:39Z",
+        "2026-05-08T01:04:33Z",
+        "2026-05-08T00:58:38Z",
+        "2026-05-08T00:53:37Z",
+        "2026-05-08T00:44:29Z",
+        "2026-05-07T09:57:20Z",
+        "2026-05-07T09:54:46Z",
+        "2026-05-07T09:37:09Z"
+      ]
+    },
+    {
+      "name": "portfolio-pilot",
+      "url": "https://github.com/czNail/portfolio-pilot",
+      "description": "Position Assistant: Asset Allocation, Fixed-Income Planning, and Rebalancing",
+      "language": "TypeScript",
+      "stars": 0,
+      "lastCommitAt": "2026-10-20T14:18:13Z",
+      "recentCommitDates": [
+        "2026-10-20T14:18:13Z",
+        "2026-10-20T14:04:34Z",
+        "2026-10-20T13:23:12Z",
+        "2026-10-20T13:05:03Z",
+        "2026-10-20T12:49:44Z"
+      ]
+    }
+  ]
+}

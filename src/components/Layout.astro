@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Icon from './Icon.astro';
+import ToolsMenu from './ToolsMenu.astro';
 import { profile } from '../data/site';
 interface Props { title?: string; description?: string; }
 const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Chen)的个人主页：技术写作、开源项目与实用工具。' } = Astro.props;
@@ -14,6 +15,7 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#fdfdfd" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/tools-menu.css" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -33,7 +35,7 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
     <header class="site-header">
       <div class="header-inner wrap">
         <a class="brand" href="/" aria-label="木匠钉子，返回首页"><span class="brand-mark" aria-hidden="true">n<span>.</span></span><span>木匠钉子</span></a>
-        <nav class="desktop-nav" aria-label="主导航"><a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>个人主页</a><a href={profile.blog}>博客</a><a href="/#projects">项目</a><a class="nav-tool" href="/portfolio-pilot/">仓位助手</a><a href={profile.github}>GitHub <Icon name="arrow" size={14}/></a></nav>
+        <nav class="desktop-nav" aria-label="主导航"><a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>个人主页</a><a href="/#projects">项目</a><a href={profile.blog}>博客</a><ToolsMenu /><a href={profile.github}>GitHub <Icon name="arrow" size={14}/></a></nav>
         <div class="header-actions">
           <button class="icon-button theme-toggle" type="button" aria-label="切换到深色主题" aria-pressed="false"><span class="moon"><Icon name="moon"/></span><span class="sun"><Icon name="sun"/></span></button>
 
@@ -41,6 +43,7 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
       </div>
 
     </header>
+    <script is:inline src="/tools-menu.js" defer></script>
     <slot />
     <footer class="wrap footer"><a class="footer-name" href="/">木匠钉子 <span>/ Neil Chen</span></a><div><a href={profile.rss}>RSS</a><a href={profile.github}>GitHub <Icon name="arrow" size={13}/></a><a href="#top" aria-label="回到顶部">回到顶部 ↑</a></div><p>© {new Date().getFullYear()} Neil Chen</p></footer>
     <script>

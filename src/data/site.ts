@@ -1,3 +1,4 @@
+import toolCatalog from './tools.json';
 export const profile = {
   name: '木匠钉子',
   englishName: 'Neil Chen',
@@ -26,14 +27,5 @@ export const projects = [
   },
 ];
 
-// 发布后填写 url 并把 status 改为 available；未发布时不渲染链接。
-export const tools = [
-  {
-    name: 'Portfolio Pilot',
-    subtitle: '资产配置与再平衡',
-    description: '记录持仓与目标比例，规划新增资金分配，查看整体资产的压力情景。',
-    status: 'available' as 'development' | 'available',
-    url: 'https://cznail.github.io/portfolio-pilot/' as string,
-    features: ['持仓管理', '定投规划', '只买入再平衡', '情景压力测试'],
-  },
-];
+// 工具目录是主页正文、下拉菜单与 /tools.json 的唯一数据源。
+export const tools = toolCatalog;
