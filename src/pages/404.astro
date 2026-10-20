@@ -1,0 +1,6 @@
+---
+import Layout from '../components/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { profile } from '../data/site';
+---
+<Layout title="页面未找到 · 木匠钉子"><main id="main" class="wrap error-page"><p class="eyebrow">404 / NOT FOUND</p><h1>这里还没有钉子。</h1><p>这个地址不存在，或内容已经搬走了。</p><div class="hero-links"><a class="button primary" href="/">返回首页 <Icon name="right" size={18}/></a><a class="text-link" href={profile.blog}>去博客看看 <Icon name="arrow" size={16}/></a></div></main></Layout>

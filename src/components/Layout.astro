@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+import Icon from './Icon.astro';
+import { profile } from '../data/site';
+interface Props { title?: string; description?: string; }
+const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Chen)的个人主页：技术写作、开源项目与实用工具。' } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fdfdfd" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <title>{title}</title>
+    <script is:inline>
+      (() => {
+        let theme = 'light';
+        try { const saved = localStorage.getItem('neil-homepage:theme'); if (saved === 'dark' || saved === 'light') theme = saved; } catch {}
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#171f2c' : '#fdfdfd');
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到正文</a>
+    <header class="site-header">
+      <div class="header-inner wrap">
+        <a class="brand" href="/" aria-label="木匠钉子，返回首页"><span class="brand-mark" aria-hidden="true">n<span>.</span></span><span>木匠钉子</span></a>
+        <nav class="desktop-nav" aria-label="主导航"><a href={profile.blog}>博客</a><a href="/#projects">项目</a><a href="/#tools">工具</a><a href={profile.github}>GitHub <Icon name="arrow" size={14}/></a></nav>
+        <div class="header-actions">
+          <button class="icon-button theme-toggle" type="button" aria-label="切换到深色主题" aria-pressed="false"><span class="moon"><Icon name="moon"/></span><span class="sun"><Icon name="sun"/></span></button>
+          <button class="icon-button menu-toggle" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="mobile-nav"><span class="menu-open"><Icon name="menu"/></span><span class="menu-close"><Icon name="close"/></span></button>
+        </div>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav wrap" aria-label="移动端主导航" hidden><a href={profile.blog}>博客 <Icon name="arrow" size={16}/></a><a href="/#projects">项目</a><a href="/#tools">工具</a><a href={profile.github}>GitHub <Icon name="arrow" size={16}/></a></nav>
+    </header>
+    <slot />
+    <footer class="wrap footer"><a class="footer-name" href="/">木匠钉子 <span>/ Neil Chen</span></a><div><a href={profile.rss}>RSS</a><a href={profile.github}>GitHub <Icon name="arrow" size={13}/></a><a href="#top" aria-label="回到顶部">回到顶部 ↑</a></div><p>© {new Date().getFullYear()} Neil Chen</p></footer>
+    <script>
+      const themeButton = document.querySelector<HTMLButtonElement>('.theme-toggle');
+      function syncTheme() {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        themeButton?.setAttribute('aria-pressed', String(dark));
+        themeButton?.setAttribute('aria-label', dark ? '切换到浅色主题' : '切换到深色主题');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#171f2c' : '#fdfdfd');
+      }
+      syncTheme();
+      themeButton?.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        try { localStorage.setItem('neil-homepage:theme', next); } catch {}
+        syncTheme();
+      });
+      window.addEventListener('storage', (event) => {
+        if (event.key === 'neil-homepage:theme' && ['dark', 'light'].includes(event.newValue || '')) {
+          document.documentElement.dataset.theme = event.newValue!; syncTheme();
+        }
+      });
+      const menu = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const nav = document.querySelector<HTMLElement>('#mobile-nav');
+      const closeMenu = () => { if (nav) nav.hidden = true; menu?.setAttribute('aria-expanded', 'false'); menu?.setAttribute('aria-label', '打开导航菜单'); };
+      menu?.addEventListener('click', () => {
+        const open = menu.getAttribute('aria-expanded') !== 'true';
+        menu.setAttribute('aria-expanded', String(open)); menu.setAttribute('aria-label', open ? '关闭导航菜单' : '打开导航菜单');
+        if (nav) nav.hidden = !open;
+      });
+      nav?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+      document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu?.getAttribute('aria-expanded') === 'true') { closeMenu(); menu.focus(); } });
+      window.matchMedia('(min-width: 701px)').addEventListener('change', event => { if(event.matches) closeMenu(); });
+    </script>
+  </body>
+</html>
