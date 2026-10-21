@@ -5,6 +5,8 @@ export const profile = {
   name: '木匠钉子',
   englishName: 'Neil Chen',
   introduction: '我是木匠钉子(Neil Chen)',
+  tagline: '咸鱼一条。',
+  avatar: '/images/avatar-shark.jpg',
   github: 'https://github.com/czNail',
   blog: 'https://cznail.github.io/my-blog/',
   rss: 'https://cznail.github.io/my-blog/rss.xml',

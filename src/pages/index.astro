@@ -22,7 +22,13 @@ const display = (repo:(typeof recommended)[number]) => {
     <section class="hero" id="top" aria-labelledby="intro">
       <div class="hero-copy">
         <p class="eyebrow"><span class="tiny-line"></span> NEIL CHEN / PERSONAL SPACE</p>
-        <h1 id="intro">我是木匠钉子<span class="english">(Neil Chen)</span></h1>
+        <div class="hero-identity">
+          <img class="hero-avatar" src={profile.avatar} alt="木匠钉子的头像：吃泡面的鲨鱼" width="258" height="219" decoding="async" />
+          <div class="hero-identity-text">
+            <h1 id="intro">我是木匠钉子<span class="english">(Neil Chen)</span></h1>
+            <p class="hero-introduction">{profile.tagline}</p>
+          </div>
+        </div>
         <div class="hero-links"><a class="button primary" href="#projects">浏览项目 <Icon name="right" size={18}/></a><a class="text-link" href={profile.blog}>阅读博客 <Icon name="right" size={17}/></a></div>
       </div>
       <aside class="recommendations" aria-labelledby="recommendations-title">
