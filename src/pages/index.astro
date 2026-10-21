@@ -9,12 +9,13 @@ import { profile, projects, tools } from '../data/site';
 import { posts } from '../data/posts';
 import snapshot from '../data/repositories.json';
 import { rankRepositories } from '../lib/recommendations.mjs';
-const recommended = rankRepositories(snapshot.repositories).slice(0,3);
+const recommended = rankRepositories(snapshot.repositories).slice(0,1);
+const featuredPost = posts[0];
 const date = (value:string) => new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit'}).format(new Date(value));
 const display = (repo:(typeof recommended)[number]) => {
   const project=projects.find(item => item.url.toLowerCase()===repo.url.toLowerCase());
   const tool=tools.find(item => item.repository===repo.name && item.status==='available');
-  return {name:tool?.name ?? project?.name ?? repo.name,description:tool?.description ?? project?.description ?? repo.description,url:tool?.url ?? repo.url,icon:tool?'grid':project?.icon ?? 'code'};
+  return {name:tool?.name ?? project?.name ?? repo.name,description:tool?.description ?? project?.description ?? repo.description,url:tool?.url ?? repo.url,icon:project?.icon ?? 'code'};
 };
 ---
 <Layout>
@@ -23,36 +24,44 @@ const display = (repo:(typeof recommended)[number]) => {
       <div class="hero-copy">
         <p class="eyebrow"><span class="tiny-line"></span> NEIL CHEN / PERSONAL SPACE</p>
         <div class="hero-identity">
-          <img class="hero-avatar" src={profile.avatar} alt="木匠钉子的头像：吃泡面的鲨鱼" width="258" height="219" decoding="async" />
-          <div class="hero-identity-text">
-            <h1 id="intro">我是木匠钉子<span class="english">(Neil Chen)</span></h1>
-            <p class="hero-introduction">{profile.tagline}</p>
-          </div>
+          <div class="avatar-frame"><img class="hero-avatar" src={profile.avatar} alt="木匠钉子的头像：吃泡面的鲨鱼" width="258" height="219" decoding="async" /></div>
+          <div class="hero-identity-text"><h1 id="intro">我是木匠钉子<span class="english">Neil Chen</span></h1><p class="hero-introduction">{profile.tagline}</p></div>
         </div>
+        <p class="hero-description">{profile.description}</p>
         <div class="hero-links"><a class="button primary" href="#projects">浏览项目 <Icon name="right" size={18}/></a><a class="text-link" href={profile.blog}>阅读博客 <Icon name="right" size={17}/></a></div>
+        <div class="hero-social"><a href={profile.wechat.url} data-wechat-open><Icon name="wechat" size={18}/> 公众号 · 木匠钉子</a><span>与博客同步更新</span></div>
       </div>
       <aside class="recommendations" aria-labelledby="recommendations-title">
-        <div class="recommendation-heading"><h2 id="recommendations-title">值得一看</h2><span>关注度与近期维护</span></div>
-        <div class="recommendation-list">{recommended.length===0 && <p class="recommendation-empty">暂时没有可推荐的公开项目。<a href={profile.github}>去 GitHub 看看 →</a></p>}{recommended.map((repo,index) => <RecommendationCard item={display(repo)} repo={repo} featured={index===0}/>)}</div>
-        <p class="recommendation-note" aria-live="polite"><span data-sync-status>每小时同步 GitHub</span><span data-sync-date>数据更新于 {date(snapshot.fetchedAt)}</span></p>
+        <div class="recommendation-heading"><h2 id="recommendations-title">值得一看</h2><span>文字与代码</span></div>
+        <a class="featured-reading" href={featuredPost.url}><span class="reading-symbol"><Icon name="book" size={22}/></span><span><small>从这篇读起 / PostgreSQL</small><strong>{featuredPost.title}</strong><span class="featured-reading-description">旧版本清理之后，空间去了哪里？</span></span><Icon name="arrow" size={17}/></a>
+        <div class="recommendation-divider"><span>近期项目</span></div>
+        <div class="recommendation-list">{recommended.length===0 && <p class="recommendation-empty">暂时没有可推荐的公开项目。<a href={profile.github}>去 GitHub 看看 →</a></p>}{recommended.map(repo => <RecommendationCard item={display(repo)} repo={repo}/>)}</div>
+        <a class="aside-more" href="#writing">更多文字与作品 <Icon name="right" size={15}/></a>
       </aside>
     </section>
 
     <section class="section" id="projects" aria-labelledby="projects-title">
-      <div class="section-heading"><div><p class="eyebrow">01 / PROJECTS</p><h2 id="projects-title">动手做点东西</h2></div><a class="text-link" href={profile.github}>GitHub <Icon name="arrow" size={16}/></a></div>
+      <div class="section-heading"><div><p class="eyebrow">01 / PROJECTS</p><h2 id="projects-title">动手做点东西<span class="heading-dot">.</span></h2></div><a class="text-link" href={profile.github}>GitHub <Icon name="arrow" size={16}/></a></div>
       <div class="project-grid">{projects.map(project => <ProjectCard project={project}/>)}{!projects.length && <p class="section-note">暂时没有可展示的公开项目。</p>}</div>
+      <p class="catalog-note"><span class="sync-dot"></span><span data-sync-status>每小时同步 GitHub</span><span data-sync-date>数据更新于 {date(snapshot.fetchedAt)}</span></p>
     </section>
 
     <section class="writing section" id="writing" aria-labelledby="writing-title">
-      <div class="section-heading"><div><p class="eyebrow">02 / WRITING</p><h2 id="writing-title">写下思考</h2></div><a class="text-link" href={profile.blog}>全部文章 <Icon name="arrow" size={16}/></a></div>
-      <div class="post-list">{posts.map((post, index) => <a class="post" href={post.url}><span class="post-index">0{index + 1}</span><div class="post-content"><div class="post-meta"><span>{post.category}</span><time datetime={post.date}>{post.date.replaceAll('-', '.')}</time></div><h3>{post.title}</h3><p>{post.description}</p></div><span class="post-arrow"><Icon name="arrow" size={22}/></span></a>)}</div>
+      <div class="section-heading"><div><p class="eyebrow">02 / WRITING</p><h2 id="writing-title">写下思考<span class="heading-dot">.</span></h2></div><a class="text-link" href={profile.blog}>全部文章 <Icon name="arrow" size={16}/></a></div>
+      <div class="writing-grid">
+        <a class="featured-post" href={featuredPost.url}>
+          <div class="post-cover"><img src={featuredPost.cover} alt="整理归档卡片、扫去旧纸片的插画" width="1410" height="600" loading="lazy" decoding="async" /></div>
+          <div class="featured-post-copy"><div class="post-meta"><span>{featuredPost.category}</span><time datetime={featuredPost.date}>{featuredPost.date.replaceAll('-', '.')}</time><span class="post-picked">精选</span></div><h3>{featuredPost.title}</h3><p>{featuredPost.description}</p><span class="read-more">读这篇文章 <Icon name="right" size={17}/></span></div>
+        </a>
+        <div class="post-list">{posts.slice(1).map((post, index) => <a class="post" href={post.url}><div class="post-meta"><span>{post.category}</span><time datetime={post.date}>{post.date.replaceAll('-', '.')}</time><span class="post-index">0{index + 2}</span></div><h3>{post.title}</h3><p>{post.description}</p><span class="read-more">继续阅读 <Icon name="right" size={16}/></span></a>)}</div>
+      </div>
+      <div class="writing-follow"><span><Icon name="wechat" size={18}/> 这些文章，也在公众号同步更新。</span><a class="text-link" href={profile.wechat.url} data-wechat-open>关注木匠钉子 <Icon name="arrow" size={15}/></a></div>
     </section>
 
     <section class="section tools-section" id="tools" aria-labelledby="tools-title">
-      <div class="section-heading"><div><p class="eyebrow">03 / TOOLS</p><h2 id="tools-title">顺手的小工具</h2></div><span class="section-note">从实际需要出发</span></div>
+      <div class="section-heading"><div><p class="eyebrow">03 / TOOLS</p><h2 id="tools-title">顺手的小工具<span class="heading-dot">.</span></h2></div><span class="section-note">打开就能用</span></div>
       <div class="tools-grid">{tools.map(tool => <ToolCard tool={tool}/>)}{!tools.length && <p class="section-note">暂时没有已发布的小工具。</p>}</div>
     </section>
-
     <div class="end-note"><span class="tiny-line"></span><p>思考留在文字里，想法落在代码中。</p></div>
     <template id="tools-template">{toolDetails.map(tool => <ToolCard tool={tool}/>)}</template>
     <template id="project-template"><ProjectCard project={{repository:'',name:'',label:'',description:'',tags:[],url:'#',icon:'code'}}/></template>

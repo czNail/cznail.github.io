@@ -6,6 +6,8 @@ export const profile = {
   englishName: 'Neil Chen',
   introduction: '我是木匠钉子(Neil Chen)',
   tagline: '咸鱼一条。',
+  description: '关注数据库内核与系统设计，也做一些自己用得上的小工具。',
+  wechat: { name: '木匠钉子', url: '/wechat/', qrcode: '/images/wechat-qrcode.jpg' },
   avatar: '/images/avatar-shark.jpg',
   github: 'https://github.com/czNail',
   blog: 'https://cznail.github.io/my-blog/',
@@ -13,6 +15,18 @@ export const profile = {
 };
 
 export const projectDetails = [
+  {
+    name: '仓位助手', label: '资产配置',
+    description: '把资产比例、定投与再平衡放在一起，做一个自己用得顺手的仓位工具。',
+    tags: ['TypeScript', '资产配置'],
+    url: 'https://github.com/czNail/portfolio-pilot', icon: 'chart',
+  },
+  {
+    name: 'TOTP 验证器', label: '隐私与安全',
+    description: '在浏览器里管理动态验证码，探索本地加密、备份与简单交互之间的平衡。',
+    tags: ['TypeScript', '本地加密'],
+    url: 'https://github.com/czNail/totp', icon: 'shield',
+  },
   {
     name: 'GMKit',
     label: '密码工具',

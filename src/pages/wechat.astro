@@ -1,0 +1,16 @@
+---
+import Layout from '../components/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { profile } from '../data/site';
+---
+<Layout title="微信公众号 · 木匠钉子" description="关注微信公众号木匠钉子，博客文章同步更新。">
+  <main id="main" class="wrap wechat-page">
+    <p class="eyebrow">WECHAT / 公众号</p>
+    <h1>木匠钉子</h1>
+    <p>博客文章，也在这里同步更新。</p>
+    <img class="wechat-qr" src={profile.wechat.qrcode} alt="微信公众号木匠钉子的关注二维码" width="430" height="430" />
+    <p class="qr-instruction">微信扫一扫，或在微信内长按识别</p>
+    <a class="text-link" href={profile.wechat.qrcode} target="_blank" rel="noopener">打开二维码原图 <Icon name="arrow" size={15}/></a>
+    <a class="text-link wechat-back" href="/">返回主页 <Icon name="right" size={16}/></a>
+  </main>
+</Layout>

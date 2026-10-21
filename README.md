@@ -5,10 +5,10 @@
 - 个人介绍：我是木匠钉子(Neil Chen)
 - 精选文章：直达现有 my-blog，不迁移文章
 - 公开项目自动来自 GitHub，已删除、转私有、Fork 或归档的仓库不再展示
-- 首屏推荐根据 GitHub Star、默认分支最近提交和近 30 天活跃度自动排序
+- 首屏展示一篇代表文章与一个自动排序的近期项目；项目排序仍参考 GitHub Star、默认分支最近提交和近 30 天活跃度
 - 正文顺序：项目 → 博客 → 小工具；导航“小工具”点击展开目录
-- 默认浅色，支持深色；主题保存在浏览器本地
-- 主页与博客共用导航名称、蓝色主题与深浅色偏好，移动端导航始终可见
+- 默认暖灰绿色浅色主题，卡片使用米灰色，支持深色；主题保存在浏览器本地
+- 主页与博客共用导航名称与深浅色偏好，移动端导航始终可见；主页使用钉子标志和蓝绿色主色
 - 响应式布局、键盘焦点、减少动效、404 页面
 
 ## 本地运行
@@ -58,7 +58,7 @@ npm run preview
 - Star 使用 `log(1+stars) / (log(1+stars)+log(11))`，避免热门仓库永久霸占推荐。
 - 最近提交按默认分支提交时间指数衰减，时间常数为 30 天。
 - 活跃度计算近 30 天提交，最多计入最近 20 次，以对数缩放限制刷屏影响。
-- 展示前 3 项，分数相同时以 Star、仓库名称保持确定顺序。
+- 首屏展示排序第一的项目，分数相同时以 Star、仓库名称保持确定顺序。
 
 `npm run refresh:repos` 刷新本地快照。GitHub Actions 每小时第 17 分钟及推送时同步公开元数据后发布；实际运行时间受 GitHub 调度影响。主页打开时直接核对 GitHub 公开仓库列表，在前台每 5 分钟重新核对，所有分页成功后才替换推荐、正文项目和工具入口。仓库新增、删除、转私有或归档无需修改列表。浏览器只读取公开 API，不包含令牌；限流、离线或接口异常时保留最近同步内容，并显示核对失败提示。默认分支提交日期和活跃度由定时构建更新，浏览器核对保留这些已验证数据，新仓库未同步前不显示提交日期。
 
@@ -76,3 +76,16 @@ npm run preview
 根站点不设置 `/仓库名/` base。现有 `my-blog` 仓库与 `/my-blog/` 博客保持独立。不要在本仓库添加会遮蔽博客的 `public/my-blog/` 目录。
 
 当前代码已准备部署；仓库创建和在线部署状态以 GitHub 的实际结果为准。
+
+## 标志与公众号
+
+- `src/components/NailMark.astro` 与 `public/favicon.svg` 使用相同的倾斜钉子轮廓。
+- 首屏、文章区和页脚都有公众号入口。支持原生 dialog、Esc 关闭与焦点返回；禁用 JavaScript 时访问 `/wechat/` 独立关注页。
+- `public/images/wechat-qrcode.jpg` 直接使用用户提供的原图，不做换色或裁切。公众号名称与地址在 `src/data/site.ts` 中维护。
+- 项目卡片在自动更新后仍保留对应图形；工具的状态检查使用正式站点地址，避免本地预览把不存在的挂载路径误判为下线。
+
+## 封面素材
+
+`public/images/btree-cleanup.webp` 为本次通过内置 imagegen 生成的文章插画。原始图像保留，页面按 2.35:1 展示。生成提示词：
+
+> Use case: illustration-story. Asset type: cover illustration for a Chinese developer's technical blog, article about cleaning duplicate keys and obsolete records in PostgreSQL B-tree indexes. Create a tasteful minimalist flat cartoon editorial illustration, widescreen aspect ratio exactly 2.35:1 (1880x800 if possible). A simple visual metaphor: two small rounded archival trays holding an orderly set of pale blue-green paper index cards; a few faded old paper slips are being gently swept to the side by one small warm ochre brush. A restrained, quiet composition with only a few clear objects, ample negative space, light warm off-white background #F2F4EF, low-saturation teal / blue / gray-green, tiny warm orange accents. Slight dimensionality and soft contact shadows, smooth rounded forms, polished contemporary illustration with subtle paper-like finish. The scene should read as tidying old duplicates, without explaining the algorithm. Main grouping in middle, leaving generous breathing room all around. No text, no letters, no numbers, no typography, no logos, no watermark, no UI, no code, no architecture diagram, no arrows, no people.
