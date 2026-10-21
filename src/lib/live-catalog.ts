@@ -1,6 +1,7 @@
+import { iconPaths } from '../data/icon-paths';
 import snapshot from '../data/repositories.json';
 import toolDetails from '../data/tools.json';
-import { projectDetails } from '../data/site';
+import { profile, projectDetails } from '../data/site';
 import { createCatalog, listRepositories, repositoryMetadata } from './catalog.mjs';
 import { rankRepositories } from './recommendations.mjs';
 
@@ -20,24 +21,24 @@ function empty(message: string) {
 function render(repositories: Repository[]) {
   const catalog = createCatalog(repositories, projectDetails, toolDetails);
   const projects = catalog.projects.map(project => {
-    const card = clone('#project-template'); card.href = project.url; card.dataset.repository = project.repository;
+    const card = clone('#project-template'); card.href = project.url; card.dataset.repository = project.repository; card.dataset.visual = project.visual;
     text(card, 'h3', project.name); text(card, 'p', project.description); text(card, '.card-kind', project.label);
     const tags = project.tags.map(tag => { const li = document.createElement('li'); li.textContent = tag; return li; });
     card.querySelector('.tags')!.replaceChildren(...tags);
     return card;
   });
   document.querySelector('.project-grid')!.replaceChildren(...(projects.length ? projects : [empty('暂时没有可展示的公开项目。')]));
-  const recommendations = rankRepositories(repositories).slice(0,3).map((repo, index) => {
+  const recommendations = rankRepositories(repositories).slice(0,1).map((repo, index) => {
     const project = catalog.projects.find(item => item.repository === repo.name)!;
     const tool = catalog.tools.find(item => item.repository === repo.name);
     const card = clone('#recommendation-template'); card.href = tool?.url ?? repo.url; card.dataset.repository = repo.name;
     card.classList.toggle('featured', index === 0);
+    card.querySelector('.recommendation-icon path')!.setAttribute('d', iconPaths[project.icon] || iconPaths.code);
     text(card, 'strong', tool?.name ?? project.name);
     text(card, '.recommendation-description', tool?.description ?? project.description);
     const meta = card.querySelector('small')!;
     if (repo.stars > 0) { const star = document.createElement('span'); star.textContent = `☆ ${repo.stars}`; meta.append(star); }
     if (repo.lastCommitAt) { const time = document.createElement('time'); time.dateTime = repo.lastCommitAt; time.textContent = `${date(repo.lastCommitAt)} 更新`; meta.append(time); }
-    if (repo.recentCommits > 0) { const count = document.createElement('span'); count.textContent = `近 30 天 ${repo.recentCommits}${repo.recentCommits >= 20 ? '+' : ''} 次提交`; meta.append(count); }
     return card;
   });
   document.querySelector('.recommendation-list')!.replaceChildren(...(recommendations.length ? recommendations : [empty('暂时没有可推荐的公开项目。')]));
@@ -80,7 +81,7 @@ export function startRepositorySync() {
         const repo = repositories.find(repo => repo.name.toLowerCase() === tool.repository.toLowerCase());
         if (!repo?.hasPages) return;
         try {
-          const response = await fetch(tool.url, {method:'HEAD',cache:'no-cache',signal:AbortSignal.timeout(8000)});
+          const response = await fetch(new URL(tool.url, profile.blog), {method:'HEAD',cache:'no-cache',signal:AbortSignal.timeout(8000)});
           if (response.status === 404 || response.status === 410) repo.pageAvailable = false;
         } catch { /* Keep the last published entry on transient network failures. */ }
       }));

@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import Icon from './Icon.astro';
 import ToolsMenu from './ToolsMenu.astro';
+import NailMark from './NailMark.astro';
+import WeChatDialog from './WeChatDialog.astro';
 import { profile } from '../data/site';
 interface Props { title?: string; description?: string; }
 const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Chen)的个人主页：技术写作、开源项目与实用工具。' } = Astro.props;
@@ -13,7 +15,7 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#fdfdfd" />
+    <meta name="theme-color" content="#e8ece5" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/tools-menu.css" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
@@ -26,7 +28,7 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
         let theme = 'light';
         try { const saved = (localStorage.getItem('neil-homepage:theme') || localStorage.getItem('theme')); if (saved === 'dark' || saved === 'light') theme = saved; } catch {}
         document.documentElement.dataset.theme = theme;
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#171f2c' : '#fdfdfd');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#172623' : '#e8ece5');
       })();
     </script>
   </head>
@@ -34,7 +36,7 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
     <a class="skip-link" href="#main">跳到正文</a>
     <header class="site-header">
       <div class="header-inner wrap">
-        <a class="brand" href="/" aria-label="木匠钉子，返回首页"><span class="brand-mark" aria-hidden="true">n<span>.</span></span><span>木匠钉子</span></a>
+        <a class="brand" href="/" aria-label="木匠钉子，返回首页"><span class="brand-mark"><NailMark /></span><span>木匠钉子</span></a>
         <nav class="desktop-nav" aria-label="主导航"><a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>个人主页</a><a href="/#projects">项目</a><a href={profile.blog}>博客</a><ToolsMenu /><a href={profile.github}>GitHub <Icon name="arrow" size={14}/></a></nav>
         <div class="header-actions">
           <button class="icon-button theme-toggle" type="button" aria-label="切换到深色主题" aria-pressed="false"><span class="moon"><Icon name="moon"/></span><span class="sun"><Icon name="sun"/></span></button>
@@ -45,14 +47,15 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
     </header>
     <script is:inline src="/tools-menu.js" defer></script>
     <slot />
-    <footer class="wrap footer"><a class="footer-name" href="/">木匠钉子 <span>/ Neil Chen</span></a><div><a href={profile.rss}>RSS</a><a href={profile.github}>GitHub <Icon name="arrow" size={13}/></a><a href="#top" aria-label="回到顶部">回到顶部 ↑</a></div><p>© {new Date().getFullYear()} Neil Chen</p></footer>
+    <footer class="wrap footer"><a class="footer-name" href="/">木匠钉子 <span>/ Neil Chen</span></a><div><a href={profile.wechat.url} data-wechat-open>公众号</a><a href={profile.rss}>RSS</a><a href={profile.github}>GitHub <Icon name="arrow" size={13}/></a><a href="#top" aria-label="回到顶部">回到顶部 ↑</a></div><p>© {new Date().getFullYear()} Neil Chen</p></footer>
+    <WeChatDialog />
     <script>
       const themeButton = document.querySelector<HTMLButtonElement>('.theme-toggle');
       function syncTheme() {
         const dark = document.documentElement.dataset.theme === 'dark';
         themeButton?.setAttribute('aria-pressed', String(dark));
         themeButton?.setAttribute('aria-label', dark ? '切换到浅色主题' : '切换到深色主题');
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#171f2c' : '#fdfdfd');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#172623' : '#e8ece5');
       }
       syncTheme();
       themeButton?.addEventListener('click', () => {

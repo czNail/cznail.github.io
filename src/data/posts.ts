@@ -1,6 +1,7 @@
 // 精选文章：从现有博客 RSS 核对，手动维护。
 export const posts = [
   {
+    "cover": "/images/btree-cleanup.webp",
     "title": "B-tree 里的重复 Key 与旧记录的清理",
     "description": "从一次阻止了 HOT 的普通 UPDATE 出发，解释 Unique Index 为什么允许重复 Key、B-tree 如何在插入路径上清理旧版本，以及 VACUUM 清理完成之后，空间为什么仍可能留在 Index 文件里。",
     "url": "https://cznail.github.io/my-blog/posts/b-tree-%E9%87%8C%E7%9A%84%E9%87%8D%E5%A4%8D-key-%E4%B8%8E%E6%97%A7%E8%AE%B0%E5%BD%95%E7%9A%84%E6%B8%85%E7%90%86/",

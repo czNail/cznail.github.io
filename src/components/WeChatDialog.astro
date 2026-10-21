@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/site';
+---
+<dialog id="wechat-dialog" class="wechat-dialog" aria-labelledby="wechat-dialog-title" aria-describedby="wechat-dialog-description">
+  <form method="dialog"><button class="icon-button dialog-close" aria-label="关闭公众号二维码" autofocus><Icon name="close" size={20}/></button></form>
+  <span class="wechat-badge"><Icon name="wechat" size={24}/></span>
+  <p class="eyebrow">WECHAT / 公众号</p>
+  <h2 id="wechat-dialog-title">{profile.wechat.name}</h2>
+  <p id="wechat-dialog-description">博客文章，也在这里同步更新。</p>
+  <img class="wechat-qr" src={profile.wechat.qrcode} alt="微信公众号木匠钉子的关注二维码" width="430" height="430" loading="lazy" />
+  <p class="qr-instruction">微信扫一扫，或在微信内长按识别</p>
+  <a class="text-link qr-original" href={profile.wechat.qrcode} target="_blank" rel="noopener">打开二维码原图 <Icon name="arrow" size={15}/></a>
+</dialog>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('#wechat-dialog');
+  if (dialog && typeof dialog.showModal === 'function') {
+    let opener: HTMLElement | null = null;
+    document.querySelectorAll<HTMLAnchorElement>('[data-wechat-open]').forEach(link => {
+      link.setAttribute('aria-haspopup', 'dialog');
+      link.setAttribute('aria-controls', 'wechat-dialog');
+      link.addEventListener('click', event => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault(); opener = link; dialog.showModal();
+        document.documentElement.classList.add('dialog-open');
+      });
+    });
+    dialog.addEventListener('click', event => {
+      const rect = dialog.getBoundingClientRect();
+      if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) dialog.close();
+    });
+    dialog.addEventListener('close', () => {
+      document.documentElement.classList.remove('dialog-open'); opener?.focus();
+    });
+  }
+</script>
