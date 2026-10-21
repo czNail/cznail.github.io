@@ -1,17 +1,19 @@
+@import "../../packages/site-ui/tokens.css";
+@import "../../packages/site-ui/shell.css";
 :root {
   color-scheme: light;
-  --bg: #e8ece5; --text: #243633; --muted: #5c6e69; --line: #cbd5cb;
-  --card: #f1f2eb; --soft: #e0e7dd; --accent: #287c82; --accent-soft: #dcece8;
-  --warm: #d69a66; --button-text: #fff;
+  --bg: var(--site-bg); --text: var(--site-text); --muted: var(--site-muted); --line: var(--site-border);
+  --card: var(--site-surface); --soft: var(--site-soft); --accent: var(--site-accent); --accent-soft: var(--site-accent-soft);
+  --warm: var(--site-warm); --button-text: var(--site-on-accent);
   --art-paper: #eef1e8; --art-stroke: #abc6be; --art-mid: #bcd8cb; --art-accent: #4c8c7d;
-  --sans: -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-  --mono: "SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  --sans: var(--site-font-sans);
+  --mono: var(--site-font-mono);
 }
 :root[data-theme=dark] {
   color-scheme: dark;
-  --bg: #172623; --text: #e5eeea; --muted: #adc0b8; --line: #344b43;
-  --card: #1e302a; --soft: #233b32; --accent: #91d1c9; --accent-soft: #2c5148;
-  --warm: #d9ab81; --button-text: #172623;
+  --bg: var(--site-bg); --text: var(--site-text); --muted: var(--site-muted); --line: var(--site-border);
+  --card: var(--site-surface); --soft: var(--site-soft); --accent: var(--site-accent); --accent-soft: var(--site-accent-soft);
+  --warm: var(--site-warm); --button-text: var(--site-on-accent);
   --art-paper: #293e35; --art-stroke: #5d8275; --art-mid: #4a7362; --art-accent: #90bfa9;
 }
 * { box-sizing: border-box; }
@@ -25,20 +27,6 @@ h1,h2,h3,p { margin-top: 0; }
 ::selection { background: var(--accent-soft); color: var(--text); }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; border-radius: 3px; }
 .wrap { width: min(1120px,calc(100% - 80px)); margin-inline: auto; }
-.site-header { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--line); background: var(--bg); }
-.header-inner { min-height: 80px; display: flex; align-items: center; gap: 30px; }
-.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 650; letter-spacing: .04em; }
-.brand-mark { display: inline-flex; color: var(--accent); }
-.desktop-nav { margin-left: auto; display: flex; align-items: center; gap: 27px; font-size: 14px; color: var(--muted); --menu-muted: var(--muted); }
-.desktop-nav a,.text-link,.footer a { transition: color .18s; }
-.desktop-nav a:hover,.text-link:hover,.footer a:hover { color: var(--accent); }
-.desktop-nav>a[aria-current=page] { color: var(--accent); font-weight: 650; }
-.desktop-nav>a:last-child { display: flex; align-items: center; gap: 4px; }
-.header-actions { display: flex; }
-.icon-button { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--text); background: transparent; cursor: pointer; }
-.icon-button:hover { background: var(--soft); color: var(--accent); }
-.sun,[data-theme=dark] .moon { display: none; }
-[data-theme=dark] .sun { display: inline; }
 .skip-link { position: fixed; left: 20px; top: -80px; z-index: 40; background: var(--accent); color: var(--button-text); padding: 12px 20px; }
 .skip-link:focus { top: 10px; }
 .hero { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(330px,.85fr); gap: 65px; align-items: center; padding: 64px 0 56px; position: relative; isolation: isolate; }
@@ -58,7 +46,7 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
 .hero-introduction { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
 .hero-description { font-size: 16px; color: var(--muted); line-height: 1.95; max-width: 440px; margin-bottom: 24px; text-wrap: pretty; }
 .hero-links { display: flex; align-items: center; gap: 27px; }
-.button { display: inline-flex; align-items: center; justify-content: center; gap: 22px; min-height: 46px; border-radius: 8px; padding: 10px 19px; font-size: 14px; font-weight: 600; transition: transform .18s,background .18s; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 22px; min-height: 46px; border-radius: var(--site-radius-control); padding: 10px 19px; font-size: 14px; font-weight: 600; transition: transform .18s,background .18s; }
 .primary { background: var(--accent); color: var(--button-text); }
 .primary:hover { transform: translateY(-2px); }
 .text-link { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; white-space: nowrap; }
@@ -97,7 +85,7 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
 .heading-dot { color: var(--warm); margin-left: 3px; }
 .section-heading>.text-link { padding-bottom: 5px; color: var(--muted); font-size: 13px; }
 .project-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
-.project-card { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 13px; background: var(--card); overflow: hidden; min-width: 0; transition: border-color .18s,transform .18s,box-shadow .18s; }
+.project-card { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--site-radius-card); background: var(--card); overflow: hidden; min-width: 0; transition: border-color .18s,transform .18s,box-shadow .18s; }
 .project-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 20px #203c300a; }
 .project-artwork { background: #e7eee8; border-bottom: 1px solid var(--line); height: 151px; overflow: hidden; display: grid; place-items: center; }
 .project-artwork svg { width: 100%; height: 150px; }
@@ -122,7 +110,7 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
 .writing { position: relative; margin-top: 12px; padding-top: 35px; }
 .writing:before { content: ''; position: absolute; z-index: -1; inset: 0 -28px; border-radius: 20px; background: var(--soft); }
 .writing-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 30px; }
-.featured-post { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: var(--card); }
+.featured-post { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: var(--site-radius-card); background: var(--card); }
 .post-cover { aspect-ratio: 2.35; background: #e6e9df; border-bottom: 1px solid var(--line); overflow: hidden; }
 .post-cover img { filter: brightness(.96); display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
 .featured-post:hover img { transform: scale(1.025); }
@@ -161,11 +149,6 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
 .end-note { display: flex; align-items: center; gap: 12px; padding: 24px 0 37px; color: var(--muted); }
 .end-note p { font-size: 12px; margin: 0; letter-spacing: .03em; }
 .end-note .tiny-line { width: 16px; opacity: .5; }
-.footer { display: flex; align-items: center; gap: 25px; border-top: 1px solid var(--line); padding: 24px 0 30px; color: var(--muted); font-size: 11px; }
-.footer-name { color: var(--text); font-size: 12px; }
-.footer-name span { color: var(--muted); margin-left: 5px; }
-.footer>div { display: flex; gap: 20px; margin-left: auto; }
-.footer p { margin: 0; font: 10px var(--mono); }
 .recommendation-empty { font-size: 13px; color: var(--muted); margin: 14px 0; }
 .recommendation-empty a { display: block; color: var(--accent); margin-top: 10px; }
 .error-page { min-height: 65vh; padding-top: 100px; padding-bottom: 80px; }
@@ -176,7 +159,7 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
 .wechat-dialog { width: min(400px,calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; color: var(--text); padding: 32px 30px 27px; border: 1px solid var(--line); border-radius: 20px; background: var(--card); text-align: center; }
 .wechat-dialog::backdrop { background: #122c2577; backdrop-filter: blur(5px); }
 .dialog-close { position: absolute; right: 14px; top: 14px; width: 32px; height: 32px; }
-.wechat-badge { display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; background: var(--soft); color: var(--accent); margin-bottom: 16px; }
+.wechat-badge { display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: var(--site-radius-card); background: var(--soft); color: var(--accent); margin-bottom: 16px; }
 .wechat-dialog .eyebrow { margin-bottom: 5px; font-size: 9px; }
 .wechat-dialog h2 { font-size: 27px; margin-bottom: 5px; }
 .wechat-dialog #wechat-dialog-description { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
@@ -200,8 +183,6 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
 }
 @media(max-width:850px) {
   .wrap { width: calc(100% - 48px); }
-  .header-inner { gap: 18px; }
-  .desktop-nav { gap: 17px; font-size: 13px; }
   .hero { gap: 25px; grid-template-columns: minmax(0,1fr) 310px; padding-block: 42px; }
   .hero-identity { align-items: flex-start; flex-direction: column; gap: 20px; }
   .hero-description { font-size: 14px; }
@@ -223,12 +204,8 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
 @media(max-width:700px) {
   html { scroll-padding-top: 122px; }
   .wrap { width: calc(100% - 40px); }
-  .header-inner { flex-wrap: wrap; gap: 7px; padding-block: 10px; min-height: 0; }
-  .brand { font-size: 14px; }
-  .brand-mark svg { width: 30px; height: 30px; }
   .header-actions { margin-left: auto; order: 2; }
   .icon-button { width: 34px; height: 34px; }
-  .desktop-nav { display: flex; order: 3; width: 100%; margin: 0; justify-content: space-between; gap: 8px; font-size: 12px; min-height: 34px; }
   .hero { grid-template-columns: 1fr; gap: 28px; padding: 34px 0 24px; }
   .hero:before { inset: 0 -20px 45% -20px; }
   .hero-identity { flex-direction: row; align-items: center; gap: 20px; margin-bottom: 19px; }
@@ -281,10 +258,6 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
   .section-note { font-size: 11px; }
   .end-note { padding: 17px 0 30px; }
   .end-note p { font-size: 11px; }
-  .footer { flex-wrap: wrap; gap: 15px; }
-  .footer-name { width: 100%; }
-  .footer>div { margin-left: 0; gap: 20px; }
-  .footer p { margin-left: auto; font-size: 9px; }
   .error-page h1 { font-size: 30px; }
 }
 @media(max-width:380px) {
@@ -298,8 +271,6 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
   .utility-card { gap: 10px; padding: 15px; }
   .utility-heading { flex-wrap: wrap; gap: 3px 9px; }
   .tool-open { font-size: 11px; gap: 4px; }
-  .footer { font-size: 10px; }
-  .footer>div { gap: 14px; }
 }
 @media(prefers-reduced-motion:reduce) {
   html { scroll-behavior: auto; }

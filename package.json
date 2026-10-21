@@ -9,13 +9,19 @@
     "preview": "astro preview --host 0.0.0.0",
     "check": "astro check",
     "refresh:repos": "node scripts/refresh-repositories.mjs",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "check:site-ui": "node scripts/sync-site-ui.mjs",
+    "prepare:site-ui": "node scripts/sync-site-ui.mjs && node scripts/prepare-site-ui.mjs",
+    "prebuild": "npm run prepare:site-ui",
+    "predev": "npm run prepare:site-ui",
+    "test:visual": "node scripts/visual-check.mjs"
   },
   "dependencies": {
     "astro": "7.4.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "@playwright/test": "^1.62.1",
     "typescript": "^5.9.3"
   }
 }

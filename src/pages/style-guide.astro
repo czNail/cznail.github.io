@@ -1,0 +1,34 @@
+---
+import Layout from '../components/Layout.astro';
+---
+<Layout title="站点样式 · 木匠钉子">
+  <main id="main" class="wrap style-guide">
+    <p class="eyebrow">SITE STYLE GUIDE</p>
+    <h1>站点样式</h1>
+    <p class="description">主页、博客和小工具共享的视觉基础。使用页头按钮检查浅色与深色主题。</p>
+    <section aria-labelledby="colors">
+      <h2 id="colors">颜色与层次</h2>
+      <div class="swatches">
+        <div class="swatch surface">卡片背景</div><div class="swatch soft">弱背景</div><div class="swatch accent">主色</div><div class="swatch accent-soft">主色浅背景</div>
+      </div>
+    </section>
+    <section aria-labelledby="type">
+      <h2 id="type">文字与控件</h2>
+      <div class="sample-card"><h3>清晰的层级与克制的装饰</h3><p>正文使用系统无衬线字体，代码与验证码使用等宽字体。</p><p class="muted">次级文字保持足够的对比度。</p><code>SELECT version(); · 123 456</code><div class="controls"><button class="button primary" type="button">主要操作</button><a class="text-link" href="/my-blog/">阅读博客 →</a></div><label for="sample">输入框</label><input id="sample" placeholder="示例内容" /></div>
+    </section>
+  </main>
+</Layout>
+<style>
+  .style-guide { padding-block: 56px; }
+  .style-guide h1 { margin-bottom: 16px; }
+  .description, .muted { color: var(--site-muted); }
+  section { margin-top: 36px; }
+  h2 { font-size: 23px; } h3 { font-size: 19px; }
+  .swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .swatch { padding: 36px 16px; border-radius: var(--site-radius-card); border: 1px solid var(--site-border); }
+  .surface, .sample-card { background: var(--site-surface); }.soft { background: var(--site-soft); }.accent { background: var(--site-accent); color: var(--site-on-accent); }.accent-soft { background: var(--site-accent-soft); }
+  .sample-card { padding: 28px; border: 1px solid var(--site-border); border-radius: var(--site-radius-card); max-width: 720px; }
+  code { font-family: var(--site-font-mono); }.controls { display: flex; gap: 24px; align-items: center; margin-block: 24px; }
+  label { display: block; margin-bottom: 6px; } input { width: 100%; max-width: 360px; padding: 10px 12px; font: inherit; color: var(--site-text); background: var(--site-bg); border: 1px solid var(--site-border); border-radius: var(--site-radius-control); }
+  @media(max-width: 700px) { .swatches { grid-template-columns: repeat(2, 1fr); }.sample-card { padding: 20px; } }
+</style>

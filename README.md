@@ -89,3 +89,17 @@ npm run preview
 `public/images/btree-cleanup.webp` 为本次通过内置 imagegen 生成的文章插画。原始图像保留，页面按 2.35:1 展示。生成提示词：
 
 > Use case: illustration-story. Asset type: cover illustration for a Chinese developer's technical blog, article about cleaning duplicate keys and obsolete records in PostgreSQL B-tree indexes. Create a tasteful minimalist flat cartoon editorial illustration, widescreen aspect ratio exactly 2.35:1 (1880x800 if possible). A simple visual metaphor: two small rounded archival trays holding an orderly set of pale blue-green paper index cards; a few faded old paper slips are being gently swept to the side by one small warm ochre brush. A restrained, quiet composition with only a few clear objects, ample negative space, light warm off-white background #F2F4EF, low-saturation teal / blue / gray-green, tiny warm orange accents. Slight dimensionality and soft contact shadows, smooth rounded forms, polished contemporary illustration with subtle paper-like finish. The scene should read as tidying old duplicates, without explaining the algorithm. Main grouping in middle, leaving generous breathing room all around. No text, no letters, no numbers, no typography, no logos, no watermark, no UI, no code, no architecture diagram, no arrows, no people.
+
+
+## 跨项目外观维护
+
+`packages/site-ui` 是主页、博客、TOTP 与仓位助手的共享视觉基础。主页直接使用源码，其他项目使用带提交版本和 SHA-256 校验的构建副本。主题、图标和导航均随各站部署，浏览器无需加载远程共享脚本。
+
+1. 修改共享包中的语义变量、公共组件或主题逻辑，更新 `package.json` 版本。
+2. 执行 `node scripts/sync-site-ui.mjs --manifest`、`npm test`、`npm run check` 和 `npm run build`。
+3. `Shared site visual checks` 工作流把本次共享源码接入四站构建，检查 375/1280px、浅色/深色、菜单、主题跨站与跨标签同步，上传截图供审查。
+4. 推送后，消费者每日检查上游，构建通过后自动创建副本升级 PR。合并升级 PR 后，各自发布新版。紧急同步可手动触发各仓库 `Update shared site UI` 工作流。
+
+[样式预览页](https://cznail.github.io/style-guide/) 集中展示颜色、排版与控件。截图检查用于发现视觉变化，仍需人工确认改版是否符合预期。
+
+本地跨站检查要求四个仓库位于同级目录（主页目录名为 `homepage`），各自构建后在主页执行 `npx playwright install chromium`、`npm run test:visual`。截图位于 `artifacts/site-ui`。
