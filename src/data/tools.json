@@ -8,5 +8,20 @@
     "status": "available",
     "url": "/portfolio-pilot/",
     "features": ["大类仓位", "定投规划", "只买入再平衡", "情景压力测试"]
+  },
+  {
+    "id": "totp",
+    "repository": "totp",
+    "name": "TOTP 验证器",
+    "subtitle": "TOTP · 本地动态验证码",
+    "description": "用 6 位 PIN 解锁多个账号，实时生成动态码，并在浏览器本地加密保存。",
+    "status": "available",
+    "url": "/totp/",
+    "features": [
+      "多账号",
+      "PIN 解锁",
+      "本地加密",
+      "加密备份"
+    ]
   }
 ]
