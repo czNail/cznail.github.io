@@ -1,0 +1,6 @@
+---
+import Icon from './Icon.astro';
+interface Props { tool: import('../lib/catalog.mjs').Tool }
+const {tool}=Astro.props;
+---
+<article class="utility-card" data-repository={tool.repository}><div class="utility-heading"><span class="utility-icon"><Icon name="grid" size={23}/></span><span class:list={['status',{ready:tool.status==='available'}]}><i></i>{tool.status==='available'?'可使用':'开发中'}</span></div><h3>{tool.name}</h3><p class="utility-subtitle">{tool.subtitle}</p><p>{tool.description}</p><ul class="tool-features">{tool.features.map(feature => <li>{feature}</li>)}</ul>{tool.status==='available' && tool.url ? <a class="button primary" href={tool.url}>打开工具 <Icon name="right" size={17}/></a> : <p class="tool-pending">正在打磨，完成后在这里见。</p>}</article>

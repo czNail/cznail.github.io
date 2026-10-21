@@ -1,22 +1,11 @@
 import {readFile,writeFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 
-const owner='czNail';
-const excluded=new Set(['my-blog','cznail.github.io']);
-
-export function isEligible(repo) {
-  return repo.owner?.login?.toLowerCase()===owner.toLowerCase() && repo.private===false && !repo.fork && !repo.archived && !repo.disabled && repo.size>0 && !excluded.has(repo.name);
-}
+import {owner,isEligible,listRepositories,repositoryMetadata} from '../src/lib/catalog.mjs';
+export {isEligible};
 
 export async function collectRepositories(request, previous={repositories:[]}, now=Date.now()) {
-  const repos=[];
-  for(let page=1;;page++) {
-    const batch=await request(`/users/${owner}/repos?type=owner&per_page=100&page=${page}`);
-    if(!Array.isArray(batch))throw Error('Invalid repository response');
-    repos.push(...batch.filter(isEligible));
-    if(batch.length<100)break;
-    if(page>=10)throw Error('Repository pagination limit exceeded');
-  }
+  const repos=await listRepositories(request);
   const repositories=[];
   for(const repo of repos) {
     const old=previous.repositories.find(item=>item.name===repo.name);
@@ -31,7 +20,7 @@ export async function collectRepositories(request, previous={repositories:[]}, n
       if(!old)continue;
       dates=old.recentCommitDates.length?old.recentCommitDates:old.lastCommitAt?[old.lastCommitAt]:[];
     }
-    repositories.push({name:repo.name,url:`https://github.com/${owner}/${encodeURIComponent(repo.name)}`,description:repo.description||'',language:repo.language||null,stars:Math.max(0,repo.stargazers_count||0),lastCommitAt:dates[0]??null,recentCommitDates:dates});
+    repositories.push({...repositoryMetadata(repo),lastCommitAt:dates[0]??null,recentCommitDates:dates});
   }
   return {fetchedAt:new Date(now).toISOString(),repositories};
 }
@@ -48,6 +37,15 @@ async function main() {
   };
   try {
     const snapshot=await collectRepositories(request,previous);
+    const tools=JSON.parse(await readFile(new URL('../src/data/tools.json',import.meta.url),'utf8'));
+    for(const tool of tools) {
+      const repo=snapshot.repositories.find(repo=>repo.name.toLowerCase()===tool.repository.toLowerCase());
+      if(!repo?.hasPages)continue;
+      try {
+        const response=await fetch(new URL(tool.url,'https://cznail.github.io'),{method:'HEAD',signal:AbortSignal.timeout(10000)});
+        if(response.status===404 || response.status===410)repo.pageAvailable=false;
+      } catch { /* Transient failures do not prove a published tool was removed. */ }
+    }
     await writeFile(target,JSON.stringify(snapshot,null,2)+'\n');
     console.log(`Updated public recommendations: ${snapshot.repositories.length} repositories.`);
   } catch {

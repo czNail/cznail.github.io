@@ -1,4 +1,6 @@
 import toolCatalog from './tools.json';
+import snapshot from './repositories.json';
+import { createCatalog } from '../lib/catalog.mjs';
 export const profile = {
   name: '木匠钉子',
   englishName: 'Neil Chen',
@@ -8,7 +10,7 @@ export const profile = {
   rss: 'https://cznail.github.io/my-blog/rss.xml',
 };
 
-export const projects = [
+export const projectDetails = [
   {
     name: 'GMKit',
     label: '密码工具',
@@ -28,4 +30,4 @@ export const projects = [
 ];
 
 // 工具目录是主页正文、下拉菜单与 /tools.json 的唯一数据源。
-export const tools = toolCatalog;
+export const { projects, tools } = createCatalog(snapshot.repositories, projectDetails, toolCatalog);

@@ -2,22 +2,38 @@
   if (window.__neilToolsMenu) { window.__neilToolsMenu(); return; }
   let catalog;
   let pending;
+  let loadedAt=0;
   async function getTools() {
-    if (catalog) return catalog;
-    if (!pending) pending = fetch('/tools.json', {cache:'no-cache', credentials:'omit'})
+    if (catalog && Date.now()-loadedAt<300000) return catalog;
+    if (!pending) pending = fetch('/tools.json', {cache:'no-cache', credentials:'omit',signal:AbortSignal.timeout(12000)})
       .then(response => { if (!response.ok) throw Error('catalog'); return response.json(); })
-      .then(data => {
+      .then(async data => {
         if (!Array.isArray(data.tools)) throw Error('catalog');
         const seen=new Set();
-        catalog=data.tools.filter(tool => {
+        const candidates=data.tools.filter(tool => {
           if (typeof tool.id!=='string' || typeof tool.name!=='string' || typeof tool.url!=='string' || seen.has(tool.id)) return false;
           let url;
           try { url=new URL(tool.url,location.origin); } catch { return false; }
           if (url.protocol!=='https:' && url.origin!==location.origin) return false;
           seen.add(tool.id);return true;
         });
-        if (!catalog.length) { catalog=undefined;throw Error('empty catalog'); }
-        return catalog;
+        catalog=(await Promise.all(candidates.map(async tool => {
+          if (typeof tool.repository !== 'string') return tool; // Older catalog format.
+          try {
+            const response=await fetch(`https://api.github.com/repos/czNail/${encodeURIComponent(tool.repository)}`, {credentials:'omit',cache:'no-cache',signal:AbortSignal.timeout(8000)});
+            if (response.status===404 || response.status===410) return null;
+            if (response.ok) {
+              const repo=await response.json();
+              if (repo.private || repo.archived || repo.disabled || repo.has_pages===false) return null;
+            }
+          } catch { /* Preserve the published entry when GitHub cannot be reached. */ }
+          try {
+            const response=await fetch(tool.url, {method:'HEAD',cache:'no-cache',signal:AbortSignal.timeout(8000)});
+            if (response.status===404 || response.status===410) return null;
+          } catch { /* Network errors do not establish removal. */ }
+          return tool;
+        }))).filter(Boolean);
+        loadedAt=Date.now();return catalog;
       }).finally(() => { pending=undefined; });
     return pending;
   }
@@ -26,7 +42,7 @@
       if (menu.dataset.bound) return;
       menu.dataset.bound='true';
       menu.addEventListener('toggle', async () => {
-        if (!menu.open || menu.dataset.loaded) return;
+        if (!menu.open) return;
         try {
           const tools=await getTools();
           const list=menu.querySelector('[data-tools-list]');
@@ -35,8 +51,12 @@
             const link=document.createElement('a');link.href=tool.url;
             const name=document.createElement('strong');name.textContent=tool.name;
             const description=document.createElement('small');description.textContent=typeof tool.description==='string'?tool.description:'';
+            if (tool.repository) link.dataset.repository=tool.repository;
             link.append(name,description);return link;
           });
+          if (!links.length) {
+            const message=document.createElement('p');message.textContent='暂时没有已发布的小工具。';links.push(message);
+          }
           list.replaceChildren(...links);menu.dataset.loaded='true';
         } catch { /* The rendered links remain usable offline or if the catalog is unavailable. */ }
       });
