@@ -1,0 +1,24 @@
+<div class="pattern-artwork" aria-hidden="true">
+  <svg viewBox="0 0 320 150" fill="none" focusable="false">
+    <g class="pattern-rings">
+      <circle cx="142" cy="75" r="45" stroke="var(--art-mid)" stroke-width="18"/>
+      <circle cx="195" cy="75" r="30" stroke="var(--art-accent)" stroke-width="2"/>
+      <circle cx="214" cy="40" r="7" fill="var(--art-accent)"/>
+      <circle cx="91" cy="110" r="4" fill="var(--art-stroke)"/>
+    </g>
+    <g class="pattern-blocks">
+      <rect x="88" y="27" width="82" height="82" rx="18" fill="var(--art-mid)"/>
+      <rect x="126" y="43" width="82" height="82" rx="18" fill="var(--art-paper)" stroke="var(--art-stroke)" stroke-width="2"/>
+      <rect x="166" y="66" width="61" height="61" rx="15" fill="var(--art-accent)"/>
+    </g>
+    <g class="pattern-waves" stroke-linecap="round">
+      <path d="M65 57c32-38 63-38 95 0s63 38 95 0" stroke="var(--art-mid)" stroke-width="14"/>
+      <path d="M65 81c32-38 63-38 95 0s63 38 95 0" stroke="var(--art-accent)" stroke-width="3"/>
+      <path d="M65 102c32-38 63-38 95 0s63 38 95 0" stroke="var(--art-stroke)" stroke-width="3"/>
+    </g>
+    <g class="pattern-grid">
+      {[0,1,2,3,4,5,6].map(column => [0,1,2,3].map(row => <circle cx={88 + column * 24} cy={39 + row * 24} r={column < 3 ? 5 : 3} fill={column === row + 1 ? 'var(--art-accent)' : 'var(--art-mid)'}/>))}
+      <rect x="170" y="72" width="38" height="38" rx="10" stroke="var(--art-accent)" stroke-width="2"/>
+    </g>
+  </svg>
+</div>

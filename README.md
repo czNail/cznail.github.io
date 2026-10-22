@@ -82,14 +82,13 @@ npm run preview
 - `src/components/NailMark.astro` 与 `public/favicon.svg` 使用相同的倾斜钉子轮廓。
 - 首屏、文章区和页脚都有公众号入口。支持原生 dialog、Esc 关闭与焦点返回；禁用 JavaScript 时访问 `/wechat/` 独立关注页。
 - `public/images/wechat-qrcode.jpg` 直接使用用户提供的原图，不做换色或裁切。公众号名称与地址在 `src/data/site.ts` 中维护。
-- 项目卡片在自动更新后仍保留对应图形；工具的状态检查使用正式站点地址，避免本地预览把不存在的挂载路径误判为下线。
+- 项目卡片在自动更新后仍保留稳定分配的装饰图案；工具的状态检查使用正式站点地址，避免本地预览把不存在的挂载路径误判为下线。
 
-## 封面素材
+## 装饰图案
 
-`public/images/btree-cleanup.webp` 为本次通过内置 imagegen 生成的文章插画。原始图像保留，页面按 2.35:1 展示。生成提示词：
+项目卡片和博客主推卡片共用 `src/components/PatternArt.astro` 中的四种固定 SVG 图案：圆环、方块、波纹和网格。它们是纯装饰，不表达文章或项目主题，自动适配深浅色。
 
-> Use case: illustration-story. Asset type: cover illustration for a Chinese developer's technical blog, article about cleaning duplicate keys and obsolete records in PostgreSQL B-tree indexes. Create a tasteful minimalist flat cartoon editorial illustration, widescreen aspect ratio exactly 2.35:1 (1880x800 if possible). A simple visual metaphor: two small rounded archival trays holding an orderly set of pale blue-green paper index cards; a few faded old paper slips are being gently swept to the side by one small warm ochre brush. A restrained, quiet composition with only a few clear objects, ample negative space, light warm off-white background #F2F4EF, low-saturation teal / blue / gray-green, tiny warm orange accents. Slight dimensionality and soft contact shadows, smooth rounded forms, polished contemporary illustration with subtle paper-like finish. The scene should read as tidying old duplicates, without explaining the algorithm. Main grouping in middle, leaving generous breathing room all around. No text, no letters, no numbers, no typography, no logos, no watermark, no UI, no code, no architecture diagram, no arrows, no people.
-
+`src/lib/patterns.mjs` 按仓库名或文章 URL 路径稳定分配图案，新增内容无需配图，也无需维护主题映射。项目首次渲染与浏览器目录刷新使用同一规则，排序或推荐变化不影响图案。增加文章只需在 `src/data/posts.ts` 维护标题、简介、链接、日期与分类；首屏推荐也直接使用这些数据。
 
 ## 跨项目外观维护
 

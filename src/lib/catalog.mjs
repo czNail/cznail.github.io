@@ -1,3 +1,5 @@
+import { contentPattern } from './patterns.mjs';
+
 /** @typedef {import('./recommendations.mjs').Repository & {hasPages?:boolean,pageAvailable?:boolean}} Repository */
 /** @typedef {{name:string,owner:{login:string},private:boolean,fork:boolean,archived:boolean,disabled:boolean,size:number,has_pages?:boolean,description?:string,language?:string,stargazers_count?:number}} GitHubRepository */
 /** @typedef {{name:string,label:string,description:string,tags:string[],url:string,icon:string}} ProjectDetails */
@@ -56,5 +58,5 @@ export function createCatalog(repositories, projectDetails, toolDetails) {
 /** Stable visual variants also used after the live catalog refreshes. */
 /** @param {string} name */
 export function projectVisual(name) {
-  return ({'code-mate':'code','portfolio-pilot':'portfolio',totp:'totp'})[name.toLowerCase()] || 'generic';
+  return contentPattern(name.toLowerCase());
 }
