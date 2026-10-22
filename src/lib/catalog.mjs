@@ -1,5 +1,3 @@
-import { contentPattern } from './patterns.mjs';
-
 /** @typedef {import('./recommendations.mjs').Repository & {hasPages?:boolean,pageAvailable?:boolean}} Repository */
 /** @typedef {{name:string,owner:{login:string},private:boolean,fork:boolean,archived:boolean,disabled:boolean,size:number,has_pages?:boolean,description?:string,language?:string,stargazers_count?:number}} GitHubRepository */
 /** @typedef {{name:string,label:string,description:string,tags:string[],url:string,icon:string}} ProjectDetails */
@@ -50,13 +48,7 @@ export function createCatalog(repositories, projectDetails, toolDetails) {
   const projects = repositories.map(repo => {
     const details = projectDetails.find(item => item.url.toLowerCase() === repo.url.toLowerCase());
     return {name: repo.name, label: '开源项目', description: repo.description || '查看项目源码与说明。',
-      tags: repo.language ? [repo.language] : [], icon: 'code', ...details, visual: projectVisual(repo.name), url: repo.url, repository: repo.name};
+      tags: repo.language ? [repo.language] : [], icon: 'code', ...details, url: repo.url, repository: repo.name};
   });
   return {projects, tools};
-}
-
-/** Stable visual variants also used after the live catalog refreshes. */
-/** @param {string} name */
-export function projectVisual(name) {
-  return contentPattern(name.toLowerCase());
 }

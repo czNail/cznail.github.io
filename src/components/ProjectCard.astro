@@ -1,11 +1,10 @@
 ---
 import Icon from './Icon.astro';
 import PatternArt from './PatternArt.astro';
-import { projectVisual } from '../lib/catalog.mjs';
 interface Props { project: {repository:string;name:string;label:string;description:string;tags:string[];url:string;icon:string} }
 const {project}=Astro.props;
 ---
-<a class="project-card" href={project.url} data-repository={project.repository} data-visual={projectVisual(project.repository)}>
+<a class="project-card" href={project.url} data-repository={project.repository}>
   <PatternArt />
   <div class="project-body">
     <div class="card-top"><span class="card-kind">{project.label}</span><Icon name="arrow" size={18}/></div>

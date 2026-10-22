@@ -21,7 +21,7 @@ function empty(message: string) {
 function render(repositories: Repository[]) {
   const catalog = createCatalog(repositories, projectDetails, toolDetails);
   const projects = catalog.projects.map(project => {
-    const card = clone('#project-template'); card.href = project.url; card.dataset.repository = project.repository; card.dataset.visual = project.visual;
+    const card = clone('#project-template'); card.href = project.url; card.dataset.repository = project.repository;
     text(card, 'h3', project.name); text(card, 'p', project.description); text(card, '.card-kind', project.label);
     const tags = project.tags.map(tag => { const li = document.createElement('li'); li.textContent = tag; return li; });
     card.querySelector('.tags')!.replaceChildren(...tags);

@@ -1,7 +1,6 @@
 ---
 import Layout from '../components/Layout.astro';
 import PatternArt from '../components/PatternArt.astro';
-import { contentPattern } from '../lib/patterns.mjs';
 import Icon from '../components/Icon.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import RecommendationCard from '../components/RecommendationCard.astro';
@@ -52,7 +51,7 @@ const display = (repo:(typeof recommended)[number]) => {
       <div class="section-heading"><div><p class="eyebrow">02 / WRITING</p><h2 id="writing-title">写下思考<span class="heading-dot">.</span></h2></div><a class="text-link" href={profile.blog}>全部文章 <Icon name="arrow" size={16}/></a></div>
       <div class="writing-grid">
         <a class="featured-post" href={featuredPost.url}>
-          <div class="post-cover" data-visual={contentPattern(new URL(featuredPost.url).pathname)}><PatternArt /></div>
+          <div class="post-cover"><PatternArt /></div>
           <div class="featured-post-copy"><div class="post-meta"><span>{featuredPost.category}</span><time datetime={featuredPost.date}>{featuredPost.date.replaceAll('-', '.')}</time><span class="post-picked">精选</span></div><h3>{featuredPost.title}</h3><p>{featuredPost.description}</p><span class="read-more">读这篇文章 <Icon name="right" size={17}/></span></div>
         </a>
         <div class="post-list">{posts.slice(1).map((post, index) => <a class="post" href={post.url}><div class="post-meta"><span>{post.category}</span><time datetime={post.date}>{post.date.replaceAll('-', '.')}</time><span class="post-index">0{index + 2}</span></div><h3>{post.title}</h3><p>{post.description}</p><span class="read-more">继续阅读 <Icon name="right" size={16}/></span></a>)}</div>
