@@ -24,7 +24,8 @@
             if (response.status===404 || response.status===410) return null;
             if (response.ok) {
               const repo=await response.json();
-              if (repo.private || repo.archived || repo.disabled || repo.has_pages===false) return null;
+              const ownPages=new URL(tool.url,location.origin).hostname==='cznail.github.io';
+              if (repo.private || repo.archived || repo.disabled || (ownPages && repo.has_pages===false)) return null;
             }
           } catch { /* Preserve the published entry when GitHub cannot be reached. */ }
           try {

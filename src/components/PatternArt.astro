@@ -1,4 +1,8 @@
-<div class="pattern-artwork" aria-hidden="true">
+---
+interface Props { image?:string }
+const {image}=Astro.props;
+---
+<div class="pattern-artwork repository-visual" data-has-image={image ? true : undefined} aria-hidden="true">
   <svg viewBox="0 0 320 150" fill="none" focusable="false">
     <g class="pattern-rings">
       <circle cx="142" cy="75" r="45" stroke="var(--art-mid)" stroke-width="18"/>
@@ -21,4 +25,5 @@
       <rect x="170" y="72" width="38" height="38" rx="10" stroke="var(--art-accent)" stroke-width="2"/>
     </g>
   </svg>
+  {image && <img src={image} alt="" width="88" height="88" decoding="async" data-repository-image />}
 </div>

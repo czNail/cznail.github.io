@@ -20,6 +20,15 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
+      - name: Restore last verified repository presentation
+        uses: actions/cache@v4
+        with:
+          path: |
+            src/data/repositories.json
+            public/project-icons/
+          key: catalog-v1-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            catalog-v1-${{ runner.os }}-
       - run: npm run refresh:repos
         env:
           GITHUB_TOKEN: ${{ github.token }}

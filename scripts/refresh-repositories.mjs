@@ -1,7 +1,8 @@
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 
-import {owner,isEligible,listRepositories,repositoryMetadata} from '../src/lib/catalog.mjs';
+import { syncPresentations } from './sync-presentations.mjs';
+import {owner,isEligible,listRepositories,repositoryMetadata,createCatalog} from '../src/lib/catalog.mjs';
 export {isEligible};
 
 export async function collectRepositories(request, previous={repositories:[]}, now=Date.now()) {
@@ -11,16 +12,18 @@ export async function collectRepositories(request, previous={repositories:[]}, n
     const old=previous.repositories.find(item=>item.name===repo.name);
     // If the default branch cannot be read, retain its previous verified commit data.
     let dates;
+    let revision = old?.revision ?? null;
     try {
       const commits=await request(`/repos/${owner}/${encodeURIComponent(repo.name)}/commits?sha=${encodeURIComponent(repo.default_branch)}&per_page=20`);
       if(!Array.isArray(commits))throw Error('Invalid commit response');
+      revision = commits[0]?.sha ?? revision;
       dates=commits.map(item=>item.commit?.committer?.date).filter(date=>typeof date==='string'&&Number.isFinite(Date.parse(date)));
       if(!dates.length)continue;
     } catch {
       if(!old)continue;
       dates=old.recentCommitDates.length?old.recentCommitDates:old.lastCommitAt?[old.lastCommitAt]:[];
     }
-    repositories.push({...repositoryMetadata(repo),lastCommitAt:dates[0]??null,recentCommitDates:dates});
+    repositories.push({...repositoryMetadata(repo, old),revision,lastCommitAt:dates[0]??null,recentCommitDates:dates});
   }
   return {fetchedAt:new Date(now).toISOString(),repositories};
 }
@@ -32,15 +35,18 @@ async function main() {
   if(process.env.GITHUB_TOKEN)headers.Authorization=`Bearer ${process.env.GITHUB_TOKEN}`;
   const request=async path=>{
     const response=await fetch(`https://api.github.com${path}`,{headers,signal:AbortSignal.timeout(15000)});
-    if(!response.ok)throw Error(`GitHub metadata request failed (${response.status})`);
+    if(!response.ok)throw Object.assign(Error(`GitHub metadata request failed (${response.status})`),{status:response.status});
     return response.json();
   };
   try {
     const snapshot=await collectRepositories(request,previous);
-    const tools=JSON.parse(await readFile(new URL('../src/data/tools.json',import.meta.url),'utf8'));
+    const assetDirectory = new URL('../public/project-icons/',import.meta.url);
+    await mkdir(assetDirectory,{recursive:true});
+    await syncPresentations(snapshot.repositories,request,(filename,bytes)=>writeFile(new URL(filename,assetDirectory),bytes));
+    const tools=createCatalog(snapshot.repositories).tools;
     for(const tool of tools) {
       const repo=snapshot.repositories.find(repo=>repo.name.toLowerCase()===tool.repository.toLowerCase());
-      if(!repo?.hasPages)continue;
+      if(!repo)continue;
       try {
         const response=await fetch(new URL(tool.url,'https://cznail.github.io'),{method:'HEAD',signal:AbortSignal.timeout(10000)});
         if(response.status===404 || response.status===410)repo.pageAvailable=false;

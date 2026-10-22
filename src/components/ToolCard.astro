@@ -1,11 +1,12 @@
 ---
 import Icon from './Icon.astro';
+import RepositoryIcon from './RepositoryIcon.astro';
 interface Props { tool: import('../lib/catalog.mjs').Tool }
 const {tool}=Astro.props;
 ---
 <article class="utility-card" data-repository={tool.repository}>
-  <span class="utility-icon"><Icon name={tool.repository==='totp'?'shield':'chart'} size={25}/></span>
+  <span class="utility-icon"><RepositoryIcon image={tool.image} icon={tool.icon} size={25}/></span>
   <div class="utility-copy"><div class="utility-heading"><h3>{tool.name}</h3><span class:list={['status',{ready:tool.status==='available'}]}><i></i>{tool.status==='available'?'可使用':'开发中'}</span></div>
-  <p>{tool.features.slice(0,3).join(' · ')}</p></div>
+  <p>{tool.features.length ? tool.features.slice(0,3).join(' · ') : tool.description}</p></div>
   {tool.status==='available' && tool.url ? <a class="tool-open" href={tool.url} aria-label={`打开${tool.name}`}>打开 <Icon name="right" size={17}/></a> : <span class="tool-pending">开发中</span>}
 </article>

@@ -1,7 +1,9 @@
-/** @typedef {import('./recommendations.mjs').Repository & {hasPages?:boolean,pageAvailable?:boolean}} Repository */
-/** @typedef {{name:string,owner:{login:string},private:boolean,fork:boolean,archived:boolean,disabled:boolean,size:number,has_pages?:boolean,description?:string,language?:string,stargazers_count?:number}} GitHubRepository */
-/** @typedef {{name:string,label:string,description:string,tags:string[],url:string,icon:string}} ProjectDetails */
-/** @typedef {{id:string,repository:string,name:string,subtitle:string,description:string,status:string,url:string,features:string[]}} Tool */
+import { toolUrl } from './presentation.mjs';
+
+/** @typedef {import('./recommendations.mjs').Repository & {hasPages?:boolean,pageAvailable?:boolean,defaultBranch?:string,revision?:string|null,presentation?:import('./presentation.mjs').Presentation|null}} Repository */
+/** @typedef {{name:string,owner:{login:string},private:boolean,fork:boolean,archived:boolean,disabled:boolean,size:number,has_pages?:boolean,description?:string,language?:string,stargazers_count?:number,default_branch?:string}} GitHubRepository */
+/** @typedef {{name:string,label:string,description:string,tags:string[],url:string,icon:string,image?:string}} ProjectDetails */
+/** @typedef {{id:string,repository:string,name:string,subtitle:string,description:string,status:string,url:string,features:string[],icon?:string,image?:string}} Tool */
 
 export const owner = 'czNail';
 const excluded = new Set(['my-blog', 'cznail.github.io']);
@@ -33,22 +35,32 @@ export function repositoryMetadata(repo, previous) {
     name: repo.name, url: `https://github.com/${owner}/${encodeURIComponent(repo.name)}`,
     description: repo.description || '', language: repo.language || null,
     stars: Math.max(0, repo.stargazers_count || 0), hasPages: repo.has_pages === true,
+    defaultBranch: repo.default_branch || previous?.defaultBranch || 'HEAD',
+    revision: previous?.revision ?? null, presentation: previous?.presentation ?? null,
     // pushed_at also changes for tags/other branches; never present it as a default-branch commit.
     lastCommitAt: previous?.lastCommitAt ?? null, recentCommitDates: previous?.recentCommitDates ?? [],
   };
 }
 
 /** @param {Repository[]} repositories @param {ProjectDetails[]} projectDetails @param {Tool[]} toolDetails */
-export function createCatalog(repositories, projectDetails, toolDetails) {
-  const byName = new Map(repositories.map(repo => [repo.name.toLowerCase(), repo]));
-  const tools = toolDetails.filter(tool => {
-    const repo = byName.get(tool.repository.toLowerCase());
-    return repo && repo.hasPages !== false && repo.pageAvailable !== false && tool.status === 'available' && tool.url;
-  });
+export function createCatalog(repositories, projectDetails = [], toolDetails = []) {
   const projects = repositories.map(repo => {
     const details = projectDetails.find(item => item.url.toLowerCase() === repo.url.toLowerCase());
+    const {tool, ...presentation} = repo.presentation || {};
     return {name: repo.name, label: '开源项目', description: repo.description || '查看项目源码与说明。',
-      tags: repo.language ? [repo.language] : [], icon: 'code', ...details, url: repo.url, repository: repo.name};
+      tags: repo.language ? [repo.language] : [], icon: 'code', ...details, ...presentation,
+      image:presentation.image || (tool ? '/project-icons/default.svg' : details?.image), url: repo.url, repository: repo.name};
+  });
+  const tools = repositories.flatMap(repo => {
+    const project = projects.find(item => item.repository === repo.name);
+    // A fetched manifest owns its tool declaration, including omission/removal.
+    const declaration = repo.presentation ? repo.presentation.tool : toolDetails.find(item => item.repository.toLowerCase() === repo.name.toLowerCase());
+    if (!declaration) return [];
+    const url = toolUrl(declaration.url);
+    const ownPages = url && new URL(url).hostname === 'cznail.github.io';
+    if (!url || (ownPages && repo.hasPages === false) || repo.pageAvailable === false || declaration.status !== 'available') return [];
+    return [{id:repo.name.toLowerCase(), repository:repo.name, name:project.name, description:project.description,
+      subtitle:'', features:[], ...declaration, url, icon:project.icon, image:project.image}];
   });
   return {projects, tools};
 }

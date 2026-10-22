@@ -96,6 +96,11 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
 .project-grid>.project-card:nth-child(4n+3) .pattern-waves,
 .project-grid>.project-card:nth-child(4n+4) .pattern-grid,
 .post-cover .pattern-reading { display: block; }
+.repository-visual { display: inline-grid; place-items: center; }
+.repository-visual[data-has-image]>svg { display: none; }
+.repository-visual>img { display: block; width: 25px; height: 25px; object-fit: contain; }
+.recommendation-icon .repository-visual>img { width: 21px; height: 21px; }
+.pattern-artwork.repository-visual>img { width: 88px; height: 88px; }
 .project-card>.pattern-artwork { height: 151px; border-bottom: 1px solid var(--line); }
 .project-body { padding: 20px 23px 21px; display: flex; flex-direction: column; flex: 1; }
 .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; color: var(--muted); }

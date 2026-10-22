@@ -1,0 +1,9 @@
+---
+import Icon from './Icon.astro';
+interface Props { image?:string; icon?:string; size?:number }
+const {image,icon='code',size=25}=Astro.props;
+---
+<span class="repository-visual" data-has-image={image ? true : undefined}>
+  <Icon name={icon} size={size}/>
+  {image && <img src={image} alt="" width={size} height={size} decoding="async" data-repository-image />}
+</span>

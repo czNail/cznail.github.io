@@ -1,6 +1,6 @@
 import { iconPaths } from '../data/icon-paths';
 import snapshot from '../data/repositories.json';
-import toolDetails from '../data/tools.json';
+import { setRepositoryImage, startImageFallbacks } from './repository-images';
 import { profile, projectDetails } from '../data/site';
 import { createCatalog, listRepositories, repositoryMetadata } from './catalog.mjs';
 import { rankRepositories } from './recommendations.mjs';
@@ -19,9 +19,10 @@ function empty(message: string) {
   return node;
 }
 function render(repositories: Repository[]) {
-  const catalog = createCatalog(repositories, projectDetails, toolDetails);
+  const catalog = createCatalog(repositories, projectDetails);
   const projects = catalog.projects.map(project => {
     const card = clone('#project-template'); card.href = project.url; card.dataset.repository = project.repository;
+    setRepositoryImage(card.querySelector('.repository-visual')!, project.image);
     text(card, 'h3', project.name); text(card, 'p', project.description); text(card, '.card-kind', project.label);
     const tags = project.tags.map(tag => { const li = document.createElement('li'); li.textContent = tag; return li; });
     card.querySelector('.tags')!.replaceChildren(...tags);
@@ -33,6 +34,7 @@ function render(repositories: Repository[]) {
     const tool = catalog.tools.find(item => item.repository === repo.name);
     const card = clone('#recommendation-template'); card.href = tool?.url ?? repo.url; card.dataset.repository = repo.name;
     card.classList.toggle('featured', index === 0);
+    setRepositoryImage(card.querySelector('.repository-visual')!, project.image);
     card.querySelector('.recommendation-icon path')!.setAttribute('d', iconPaths[project.icon] || iconPaths.code);
     text(card, 'strong', tool?.name ?? project.name);
     text(card, '.recommendation-description', tool?.description ?? project.description);
@@ -42,10 +44,14 @@ function render(repositories: Repository[]) {
     return card;
   });
   document.querySelector('.recommendation-list')!.replaceChildren(...(recommendations.length ? recommendations : [empty('暂时没有可推荐的公开项目。')]));
-  const toolsTemplate = document.querySelector<HTMLTemplateElement>('#tools-template')!;
   const tools = catalog.tools.map(tool => {
-    const original = [...toolsTemplate.content.querySelectorAll<HTMLElement>('[data-repository]')].find(card => card.dataset.repository!.toLowerCase() === tool.repository.toLowerCase())!;
-    return original.cloneNode(true);
+    const card = clone('#tool-template'); card.dataset.repository = tool.repository;
+    text(card,'h3',tool.name); text(card,'p',tool.features.length ? tool.features.slice(0,3).join(' · ') : tool.description);
+    const link=card.querySelector<HTMLAnchorElement>('.tool-open')!;
+    link.href=tool.url; link.setAttribute('aria-label',`打开${tool.name}`);
+    card.querySelector('.utility-icon path')!.setAttribute('d',iconPaths[tool.icon || 'code'] || iconPaths.code);
+    setRepositoryImage(card.querySelector('.repository-visual')!,tool.image);
+    return card;
   });
   document.querySelector('.tools-grid')!.replaceChildren(...(tools.length ? tools : [empty('暂时没有已发布的小工具。')]));
   document.querySelectorAll('[data-tools-list]').forEach(list => {
@@ -60,6 +66,7 @@ function render(repositories: Repository[]) {
 }
 
 export function startRepositorySync() {
+  startImageFallbacks();
   let lastAttempt = 0;
   let pending = false;
   async function sync() {
@@ -77,9 +84,9 @@ export function startRepositorySync() {
       });
       const repositories = repos.map(repo => repositoryMetadata(repo, snapshot.repositories.find(old => old.name.toLowerCase() === repo.name.toLowerCase())));
       // A repository can still exist while its Pages deployment has been removed.
-      await Promise.all(toolDetails.map(async tool => {
+      await Promise.all(createCatalog(repositories, projectDetails).tools.map(async tool => {
         const repo = repositories.find(repo => repo.name.toLowerCase() === tool.repository.toLowerCase());
-        if (!repo?.hasPages) return;
+        if (!repo) return;
         try {
           const response = await fetch(new URL(tool.url, profile.blog), {method:'HEAD',cache:'no-cache',signal:AbortSignal.timeout(8000)});
           if (response.status === 404 || response.status === 410) repo.pageAvailable = false;

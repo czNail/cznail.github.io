@@ -1,11 +1,11 @@
 ---
 import Icon from './Icon.astro';
 import PatternArt from './PatternArt.astro';
-interface Props { project: {repository:string;name:string;label:string;description:string;tags:string[];url:string;icon:string} }
+interface Props { project: {repository:string;name:string;label:string;description:string;tags:string[];url:string;icon:string;image?:string} }
 const {project}=Astro.props;
 ---
 <a class="project-card" href={project.url} data-repository={project.repository}>
-  <PatternArt />
+  <PatternArt image={project.image} />
   <div class="project-body">
     <div class="card-top"><span class="card-kind">{project.label}</span><Icon name="arrow" size={18}/></div>
     <h3>{project.name}</h3><p>{project.description}</p>

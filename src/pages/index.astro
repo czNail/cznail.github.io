@@ -5,7 +5,6 @@ import Icon from '../components/Icon.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import RecommendationCard from '../components/RecommendationCard.astro';
 import ToolCard from '../components/ToolCard.astro';
-import toolDetails from '../data/tools.json';
 import { profile, projects, tools } from '../data/site';
 import { posts } from '../data/posts';
 import snapshot from '../data/repositories.json';
@@ -14,9 +13,9 @@ const recommended = rankRepositories(snapshot.repositories).slice(0,1);
 const featuredPost = posts[0];
 const date = (value:string) => new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit'}).format(new Date(value));
 const display = (repo:(typeof recommended)[number]) => {
-  const project=projects.find(item => item.url.toLowerCase()===repo.url.toLowerCase());
+  const project=projects.find(item => item.repository.toLowerCase()===repo.name.toLowerCase());
   const tool=tools.find(item => item.repository===repo.name && item.status==='available');
-  return {name:tool?.name ?? project?.name ?? repo.name,description:tool?.description ?? project?.description ?? repo.description,url:tool?.url ?? repo.url,icon:project?.icon ?? 'code'};
+  return {name:tool?.name ?? project?.name ?? repo.name,description:tool?.description ?? project?.description ?? repo.description,url:tool?.url ?? repo.url,icon:project?.icon ?? 'code',image:project?.image};
 };
 ---
 <Layout>
@@ -64,7 +63,7 @@ const display = (repo:(typeof recommended)[number]) => {
       <div class="tools-grid">{tools.map(tool => <ToolCard tool={tool}/>)}{!tools.length && <p class="section-note">暂时没有已发布的小工具。</p>}</div>
     </section>
     <div class="end-note"><span class="tiny-line"></span><p>思考留在文字里，想法落在代码中。</p></div>
-    <template id="tools-template">{toolDetails.map(tool => <ToolCard tool={tool}/>)}</template>
+    <template id="tool-template"><ToolCard tool={{id:'',repository:'',name:'',subtitle:'',description:'',status:'available',url:'#',features:[]}}/></template>
     <template id="project-template"><ProjectCard project={{repository:'',name:'',label:'',description:'',tags:[],url:'#',icon:'code'}}/></template>
     <template id="recommendation-template"><RecommendationCard item={{name:'',description:'',url:'#',icon:'code'}} repo={{name:'',stars:0,lastCommitAt:null,recentCommits:0}}/></template>
   </main>

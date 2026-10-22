@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-21T07:37:53.585Z",
+  "fetchedAt": "2026-10-22T09:25:31.164Z",
   "repositories": [
     {
       "name": "code-mate",
@@ -8,8 +8,21 @@
       "language": null,
       "stars": 0,
       "hasPages": false,
-      "lastCommitAt": "2026-09-17T06:12:13Z",
+      "defaultBranch": "main",
+      "revision": "ee6493497eb8f2e1f1f4fb324d6224a7952009a7",
+      "presentation": {
+        "name": "Code Mate",
+        "description": "围绕真实代码与文档，逐步讨论数据库类系统的模块边界、状态所有权与故障语义。",
+        "label": "设计评审",
+        "tags": [
+          "Agent Skill",
+          "System Design"
+        ],
+        "image": "/project-icons/code-mate-6709ff9625c86e8d47b117fc8a94e0b3077bab2b.svg"
+      },
+      "lastCommitAt": "2026-10-22T09:25:29Z",
       "recentCommitDates": [
+        "2026-10-22T09:25:29Z",
         "2026-09-17T06:12:13Z",
         "2026-09-17T05:55:16Z",
         "2026-09-08T05:35:42Z",
@@ -29,8 +42,33 @@
       "language": "TypeScript",
       "stars": 0,
       "hasPages": true,
-      "lastCommitAt": "2026-10-21T01:36:25Z",
+      "defaultBranch": "main",
+      "revision": "e78232949a61ea6c570254472d9df67e9cd44718",
+      "presentation": {
+        "name": "仓位助手",
+        "description": "把资产比例、定投与再平衡放在一起，做一个自己用得顺手的仓位工具。",
+        "label": "资产配置",
+        "tags": [
+          "TypeScript",
+          "资产配置"
+        ],
+        "tool": {
+          "url": "https://cznail.github.io/portfolio-pilot/",
+          "subtitle": "Portfolio Pilot · 资产配置与再平衡",
+          "features": [
+            "大类仓位",
+            "定投规划",
+            "只买入再平衡",
+            "情景压力测试"
+          ],
+          "status": "available"
+        },
+        "image": "/project-icons/portfolio-pilot-b8e04b80cd992ea64d41b71e153bf22917a6df20.svg"
+      },
+      "lastCommitAt": "2026-10-22T09:25:26Z",
       "recentCommitDates": [
+        "2026-10-22T09:25:26Z",
+        "2026-10-21T12:21:17Z",
         "2026-10-21T01:36:25Z",
         "2026-10-21T01:10:14Z",
         "2026-10-20T14:18:13Z",
@@ -47,8 +85,33 @@
       "language": "TypeScript",
       "stars": 0,
       "hasPages": true,
-      "lastCommitAt": "2026-10-21T06:51:33Z",
+      "defaultBranch": "main",
+      "revision": "e23da7d1cf483f22656ca044cb880188d156b99e",
+      "presentation": {
+        "name": "TOTP 验证器",
+        "description": "在浏览器里管理动态验证码，探索本地加密、备份与简单交互之间的平衡。",
+        "label": "隐私与安全",
+        "tags": [
+          "TypeScript",
+          "本地加密"
+        ],
+        "tool": {
+          "url": "https://cznail.github.io/totp/",
+          "subtitle": "TOTP · 本地动态验证码",
+          "features": [
+            "多账号",
+            "PIN 解锁",
+            "本地加密",
+            "加密备份"
+          ],
+          "status": "available"
+        },
+        "image": "/project-icons/totp-24efc01396c5b32790f04fe704bb046ee9203610.svg"
+      },
+      "lastCommitAt": "2026-10-22T09:25:23Z",
       "recentCommitDates": [
+        "2026-10-22T09:25:23Z",
+        "2026-10-21T12:21:16Z",
         "2026-10-21T06:51:33Z",
         "2026-10-21T06:48:14Z",
         "2026-10-21T06:20:28Z",
