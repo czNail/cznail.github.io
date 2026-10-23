@@ -69,6 +69,11 @@ try {
         assert.equal(await page.locator('.recommendation').getAttribute('data-repository'), 'pg-playground');
         assert.equal(await page.locator('#tools').count(), 1, 'old tools deep link');
         assert.deepEqual(githubRequests, [], 'homepage/menu must not contact GitHub');
+        const latest = JSON.parse(await readFile('src/data/posts.json', 'utf8'))[0];
+        assert.equal(await page.locator('.featured-reading').getAttribute('href'), latest.url, 'hero recommends the latest published article');
+        assert.equal(await page.locator('.featured-post').getAttribute('href'), latest.url, 'writing card uses the same latest article');
+        assert.equal(await page.locator('.post-cover .pattern-reading').isVisible(), true, 'fixed book art');
+        assert.equal(await page.locator('.post-cover img').count(), 0, 'article cover does not replace the book art');
         for (const image of await page.locator('.project-preview img, .post-cover img').all()) {
           await image.scrollIntoViewIfNeeded();
           await image.evaluate(element => element.decode());

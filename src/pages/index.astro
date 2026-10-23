@@ -5,6 +5,7 @@ import { catalogPreview, previewLimits } from '../lib/catalog-preview.mjs';
 import Icon from '../components/Icon.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import RecommendationCard from '../components/RecommendationCard.astro';
+import BlogArt from '../components/BlogArt.astro';
 import { profile, works, featuredWork } from '../data/site';
 import { posts } from '../data/posts';
 const featuredPost = posts[0];
@@ -25,7 +26,7 @@ const projectList = catalogPreview(works, 'projects');
       </div>
       <aside class="recommendations" aria-labelledby="recommendations-title">
         <div class="recommendation-heading"><h2 id="recommendations-title">值得一看</h2><span>文字与代码</span></div>
-        <a class="featured-reading" href={featuredPost.url}><span class="reading-symbol"><Icon name="book" size={22}/></span><span><small>代表文章 / {featuredPost.category}</small><strong>{featuredPost.title}</strong><span class="featured-reading-description">{featuredPost.description}</span></span><Icon name="arrow" size={17}/></a>
+        <a class="featured-reading" href={featuredPost.url}><span class="reading-symbol"><Icon name="book" size={22}/></span><span><small>最新文章 / {featuredPost.category}</small><strong>{featuredPost.title}</strong><span class="featured-reading-description">{featuredPost.description}</span></span><Icon name="arrow" size={17}/></a>
         {featuredWork && <><div class="recommendation-divider"><span>代表作品</span></div><RecommendationCard item={featuredWork}/></>}
         <a class="aside-more" href="#writing">更多技术文章 <Icon name="right" size={15}/></a>
       </aside>
@@ -43,8 +44,8 @@ const projectList = catalogPreview(works, 'projects');
       <div class="section-heading"><div><p class="eyebrow">02 / WRITING</p><h2 id="writing-title">写下思考<span class="heading-dot">.</span></h2></div><a class="text-link" href={profile.blog}>全部文章 <Icon name="arrow" size={16}/></a></div>
       <div class="writing-grid">
         <a class="featured-post" href={featuredPost.url}>
-          {featuredPost.cover && <div class="post-cover"><img src={featuredPost.cover.src} alt={featuredPost.cover.alt} width={featuredPost.cover.width} height={featuredPost.cover.height} loading="lazy" decoding="async" /></div>}
-          <div class="featured-post-copy"><div class="post-meta"><span>{featuredPost.category}</span><time datetime={featuredPost.date}>{featuredPost.date.replaceAll('-', '.')}</time><span class="post-picked">精选</span></div><h3>{featuredPost.title}</h3><p>{featuredPost.description}</p><span class="read-more">读这篇文章 <Icon name="right" size={17}/></span></div>
+          <div class="post-cover"><BlogArt /></div>
+          <div class="featured-post-copy"><div class="post-meta"><span>{featuredPost.category}</span><time datetime={featuredPost.date}>{featuredPost.date.replaceAll('-', '.')}</time><span class="post-picked">最新</span></div><h3>{featuredPost.title}</h3><p>{featuredPost.description}</p><span class="read-more">读这篇文章 <Icon name="right" size={17}/></span></div>
         </a>
         <div class="post-list">{posts.slice(1, previewLimits.posts).map((post, index) => <a class="post" href={post.url}><div class="post-meta"><span>{post.category}</span><time datetime={post.date}>{post.date.replaceAll('-', '.')}</time><span class="post-index">0{index + 2}</span></div><h3>{post.title}</h3><p>{post.description}</p><span class="read-more">继续阅读 <Icon name="right" size={16}/></span></a>)}</div>
       </div>

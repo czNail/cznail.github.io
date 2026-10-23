@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '37 * * * *'
 permissions:
   contents: read
 concurrency:
@@ -28,13 +30,18 @@ jobs:
         with:
           path: |
             src/data/repositories.json
+            src/data/posts.json
             public/project-icons/
-          key: catalog-v1-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: catalog-v2-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
+            catalog-v2-${{ runner.os }}-
             catalog-v1-${{ runner.os }}-
       - run: npm run refresh:repos
+        if: github.event_name != 'schedule'
         env:
           GITHUB_TOKEN: ${{ github.token }}
+      - name: Refresh latest published articles
+        run: npm run refresh:posts
       - run: npm test
       - run: npm run check
       - run: npm run build

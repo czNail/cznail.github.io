@@ -128,7 +128,6 @@ h1 .english { display: block; font-size: 23px; letter-spacing: -.015em; font-wei
 .featured-post { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: var(--site-radius-card); background: var(--card); }
 .post-cover { aspect-ratio: 2.35; border-bottom: 1px solid var(--line); overflow: hidden; }
 .post-cover .pattern-artwork { height: 100%; }
-.post-cover>img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .featured-post-copy { padding: 22px 25px 24px; }
 .post-meta { display: flex; gap: 13px; align-items: center; font: 10px/1.6 var(--mono); color: var(--muted); margin-bottom: 9px; }
 .post-meta>span:first-child { color: var(--accent); }
