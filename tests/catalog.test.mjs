@@ -4,6 +4,17 @@ import {createCatalog,listRepositories,repositoryMetadata} from '../src/lib/cata
 const raw=name=>({name,owner:{login:'czNail'},private:false,fork:false,archived:false,disabled:false,size:1,has_pages:true});
 const details=[{name:'旧项目',url:'https://github.com/czNail/deleted',description:'说明',label:'项目',icon:'code',tags:[]}];
 const tool={id:'tool',repository:'tool',name:'工具',status:'available',url:'/tool/'};
+test('新发布的Pages仓库不会因GitHub大小统计延迟而被当作空仓库',async()=>{
+  const published={...raw('pg-playground'),size:0};
+  const repositories=await listRepositories(async()=>[
+    published,
+    {...raw('empty'),size:0,has_pages:false},
+    {...published,name:'private-tool',private:true},
+    {...published,name:'fork-tool',fork:true},
+    {...published,name:'archived-tool',archived:true},
+  ]);
+  assert.deepEqual(repositories.map(repo=>repo.name),['pg-playground']);
+});
 test('正文与工具目录排除已删除项目；新增公开仓库无需手工录入',()=>{
   const catalog=createCatalog([repositoryMetadata({...raw('new'),language:'C'})],details,[tool]);
   assert.deepEqual(catalog.projects.map(item=>item.repository),['new']);

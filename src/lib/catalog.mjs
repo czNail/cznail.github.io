@@ -10,7 +10,9 @@ const excluded = new Set(['my-blog', 'cznail.github.io']);
 
 export function isEligible(repo) {
   return repo.owner?.login?.toLowerCase() === owner.toLowerCase() && repo.private === false &&
-    !repo.fork && !repo.archived && !repo.disabled && repo.size > 0 && !excluded.has(repo.name.toLowerCase());
+    !repo.fork && !repo.archived && !repo.disabled &&
+    // GitHub's size estimate can stay at zero after a new Pages site is published.
+    (repo.size > 0 || repo.has_pages === true) && !excluded.has(repo.name.toLowerCase());
 }
 
 // Read every page before replacing anything: a failed/partial response must not clear the page.
