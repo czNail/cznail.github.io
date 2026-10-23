@@ -1,6 +1,6 @@
 import { toolUrl } from './presentation.mjs';
 
-/** @typedef {import('./recommendations.mjs').Repository & {hasPages?:boolean,pageAvailable?:boolean,defaultBranch?:string,revision?:string|null,presentation?:import('./presentation.mjs').Presentation|null}} Repository */
+/** @typedef {{name:string,url:string,description:string,language:string|null,stars:number,lastCommitAt:string|null,recentCommitDates:string[],hasPages?:boolean,pageAvailable?:boolean,defaultBranch?:string,revision?:string|null,presentation?:import('./presentation.mjs').Presentation|null}} Repository */
 /** @typedef {{name:string,owner:{login:string},private:boolean,fork:boolean,archived:boolean,disabled:boolean,size:number,has_pages?:boolean,description?:string,language?:string,stargazers_count?:number,default_branch?:string}} GitHubRepository */
 /** @typedef {{name:string,label:string,description:string,tags:string[],url:string,icon:string,image?:string}} ProjectDetails */
 /** @typedef {{id:string,repository:string,name:string,subtitle:string,description:string,status:string,url:string,features:string[],icon?:string,image?:string}} Tool */

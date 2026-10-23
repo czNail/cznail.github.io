@@ -50,3 +50,11 @@ test('server-rendered navigation is escaped, filters unsafe URLs and marks the c
   assert.doesNotMatch(html, /javascript:|<script>/);
   assert.match(html, /<summary>小工具<\/summary>/);
 });
+test('static menus carry their catalog without a browser refresh and keep old anchors', () => {
+  const html = headerMarkup({active:'home',staticTools:true,tools:[{name:'实验台',url:'/pg-playground/'}]});
+  assert.match(html, /data-tools-static/);
+  assert.match(html, /href="\/#projects">作品/);
+  assert.match(html, /href="\/#tools"/);
+  assert.match(html, /href="\/pg-playground\/"/);
+  assert.doesNotMatch(headerMarkup(), /data-tools-static/);
+});

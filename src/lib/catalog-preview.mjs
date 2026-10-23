@@ -1,5 +1,5 @@
-/** Limits shared by static rendering and live GitHub refreshes. */
-export const previewLimits = Object.freeze({projects: 2, tools: 3, posts: 3});
+/** Static homepage limits; full catalogs remain available in the native details. */
+export const previewLimits = Object.freeze({projects: 4, tools: 3, posts: 3});
 
 /** @template T @param {T[]} items @param {'projects'|'tools'} kind */
 export function catalogPreview(items, kind) {

@@ -2,25 +2,13 @@
 import Layout from '../components/Layout.astro';
 import CatalogMore from '../components/CatalogMore.astro';
 import { catalogPreview, previewLimits } from '../lib/catalog-preview.mjs';
-import BlogArt from '../components/BlogArt.astro';
 import Icon from '../components/Icon.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import RecommendationCard from '../components/RecommendationCard.astro';
-import ToolCard from '../components/ToolCard.astro';
-import { profile, projects, tools } from '../data/site';
+import { profile, works, featuredWork } from '../data/site';
 import { posts } from '../data/posts';
-import snapshot from '../data/repositories.json';
-import { rankRepositories } from '../lib/recommendations.mjs';
-const recommended = rankRepositories(snapshot.repositories).slice(0,1);
 const featuredPost = posts[0];
-const projectList = catalogPreview(projects, 'projects');
-const toolList = catalogPreview(tools, 'tools');
-const date = (value:string) => new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit'}).format(new Date(value));
-const display = (repo:(typeof recommended)[number]) => {
-  const project=projects.find(item => item.repository.toLowerCase()===repo.name.toLowerCase());
-  const tool=tools.find(item => item.repository===repo.name && item.status==='available');
-  return {name:tool?.name ?? project?.name ?? repo.name,description:tool?.description ?? project?.description ?? repo.description,url:tool?.url ?? repo.url,icon:project?.icon ?? 'code',image:project?.image};
-};
+const projectList = catalogPreview(works, 'projects');
 ---
 <Layout>
   <main id="main" class="wrap">
@@ -32,30 +20,30 @@ const display = (repo:(typeof recommended)[number]) => {
           <div class="hero-identity-text"><h1 id="intro">我是木匠钉子<span class="english">Neil Chen</span></h1><p class="hero-introduction">{profile.tagline}</p></div>
         </div>
         <p class="hero-description">{profile.description}</p>
-        <div class="hero-links"><a class="button primary" href="#projects">浏览项目 <Icon name="right" size={18}/></a><a class="text-link" href={profile.blog}>阅读博客 <Icon name="right" size={17}/></a></div>
+        <div class="hero-links"><a class="button primary" href="#projects">浏览作品 <Icon name="right" size={18}/></a><a class="text-link" href={profile.blog}>阅读博客 <Icon name="right" size={17}/></a></div>
         <div class="hero-social"><a href={profile.wechat.url} data-wechat-open><Icon name="wechat" size={18}/> 公众号 · 木匠钉子</a><span>与博客同步更新</span></div>
       </div>
       <aside class="recommendations" aria-labelledby="recommendations-title">
         <div class="recommendation-heading"><h2 id="recommendations-title">值得一看</h2><span>文字与代码</span></div>
-        <a class="featured-reading" href={featuredPost.url}><span class="reading-symbol"><Icon name="book" size={22}/></span><span><small>从这篇读起 / {featuredPost.category}</small><strong>{featuredPost.title}</strong><span class="featured-reading-description">{featuredPost.description}</span></span><Icon name="arrow" size={17}/></a>
-        <div class="recommendation-divider"><span>近期项目</span></div>
-        <div class="recommendation-list">{recommended.length===0 && <p class="recommendation-empty">暂时没有可推荐的公开项目。<a href={profile.github}>去 GitHub 看看 →</a></p>}{recommended.map(repo => <RecommendationCard item={display(repo)} repo={repo}/>)}</div>
-        <a class="aside-more" href="#writing">更多文字与作品 <Icon name="right" size={15}/></a>
+        <a class="featured-reading" href={featuredPost.url}><span class="reading-symbol"><Icon name="book" size={22}/></span><span><small>代表文章 / {featuredPost.category}</small><strong>{featuredPost.title}</strong><span class="featured-reading-description">{featuredPost.description}</span></span><Icon name="arrow" size={17}/></a>
+        {featuredWork && <><div class="recommendation-divider"><span>代表作品</span></div><RecommendationCard item={featuredWork}/></>}
+        <a class="aside-more" href="#writing">更多技术文章 <Icon name="right" size={15}/></a>
       </aside>
     </section>
 
     <section class="section" id="projects" aria-labelledby="projects-title">
-      <div class="section-heading"><div><p class="eyebrow">01 / PROJECTS</p><h2 id="projects-title">动手做点东西<span class="heading-dot">.</span></h2></div><a class="text-link" href={profile.github}>GitHub <Icon name="arrow" size={16}/></a></div>
-      <div class="project-grid" data-catalog-preview="projects">{projectList.preview.map(project => <ProjectCard project={project}/>)}{!projects.length && <p class="section-note">暂时没有可展示的公开项目。</p>}</div>
+      <span id="tools" class="anchor-alias" aria-hidden="true"></span>
+      <div class="section-heading"><div><p class="eyebrow">01 / WORKS</p><h2 id="projects-title">动手做点东西<span class="heading-dot">.</span></h2></div><a class="text-link" href={profile.github}>全部源码 <Icon name="arrow" size={16}/></a></div>
+      <p class="section-description">自己用得上的工具，也分享给你。选一个，打开试试。</p>
+      <div class="project-grid" data-catalog-preview="projects">{projectList.preview.map(project => <ProjectCard project={project}/>)}{!works.length && <p class="section-note">暂时没有可展示的公开作品。</p>}</div>
       <CatalogMore kind="projects" total={projectList.total} hasMore={projectList.remaining.length > 0}>{projectList.remaining.map(project => <ProjectCard project={project}/>)}</CatalogMore>
-      <p class="catalog-note"><span class="sync-dot"></span><span data-sync-status>每小时同步 GitHub</span><span data-sync-date>数据更新于 {date(snapshot.fetchedAt)}</span></p>
     </section>
 
     <section class="writing section" id="writing" aria-labelledby="writing-title">
       <div class="section-heading"><div><p class="eyebrow">02 / WRITING</p><h2 id="writing-title">写下思考<span class="heading-dot">.</span></h2></div><a class="text-link" href={profile.blog}>全部文章 <Icon name="arrow" size={16}/></a></div>
       <div class="writing-grid">
         <a class="featured-post" href={featuredPost.url}>
-          <div class="post-cover"><BlogArt /></div>
+          {featuredPost.cover && <div class="post-cover"><img src={featuredPost.cover.src} alt={featuredPost.cover.alt} width={featuredPost.cover.width} height={featuredPost.cover.height} loading="lazy" decoding="async" /></div>}
           <div class="featured-post-copy"><div class="post-meta"><span>{featuredPost.category}</span><time datetime={featuredPost.date}>{featuredPost.date.replaceAll('-', '.')}</time><span class="post-picked">精选</span></div><h3>{featuredPost.title}</h3><p>{featuredPost.description}</p><span class="read-more">读这篇文章 <Icon name="right" size={17}/></span></div>
         </a>
         <div class="post-list">{posts.slice(1, previewLimits.posts).map((post, index) => <a class="post" href={post.url}><div class="post-meta"><span>{post.category}</span><time datetime={post.date}>{post.date.replaceAll('-', '.')}</time><span class="post-index">0{index + 2}</span></div><h3>{post.title}</h3><p>{post.description}</p><span class="read-more">继续阅读 <Icon name="right" size={16}/></span></a>)}</div>
@@ -63,18 +51,10 @@ const display = (repo:(typeof recommended)[number]) => {
       <div class="writing-follow"><span><Icon name="wechat" size={18}/> 这些文章，也在公众号同步更新。</span><a class="text-link" href={profile.wechat.url} data-wechat-open>关注木匠钉子 <Icon name="arrow" size={15}/></a></div>
     </section>
 
-    <section class="section tools-section" id="tools" aria-labelledby="tools-title">
-      <div class="section-heading"><div><p class="eyebrow">03 / TOOLS</p><h2 id="tools-title">顺手的小工具<span class="heading-dot">.</span></h2></div><span class="section-note">打开就能用</span></div>
-      <div class="tools-grid" data-catalog-preview="tools">{toolList.preview.map(tool => <ToolCard tool={tool}/>)}{!tools.length && <p class="section-note">暂时没有已发布的小工具。</p>}</div>
-      <CatalogMore kind="tools" total={toolList.total} hasMore={toolList.remaining.length > 0}>{toolList.remaining.map(tool => <ToolCard tool={tool}/>)}</CatalogMore>
-    </section>
     <div class="end-note"><span class="tiny-line"></span><p>思考留在文字里，想法落在代码中。</p></div>
-    <template id="tool-template"><ToolCard tool={{id:'',repository:'',name:'',subtitle:'',description:'',status:'available',url:'#',features:[]}}/></template>
-    <template id="project-template"><ProjectCard project={{repository:'',name:'',label:'',description:'',tags:[],url:'#',icon:'code'}}/></template>
-    <template id="recommendation-template"><RecommendationCard item={{name:'',description:'',url:'#',icon:'code'}} repo={{name:'',stars:0,lastCommitAt:null,recentCommits:0}}/></template>
   </main>
   <script>
-    import { startRepositorySync } from '../lib/live-catalog';
-    startRepositorySync();
+    import { startImageFallbacks } from '../lib/repository-images';
+    startImageFallbacks();
   </script>
 </Layout>

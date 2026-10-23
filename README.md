@@ -2,14 +2,13 @@
 
 个人开发者主页。Astro + TypeScript，静态输出，无需后端。
 
-- 个人介绍：我是木匠钉子(Neil Chen)
-- 精选文章：直达现有 my-blog，不迁移文章
-- 公开项目自动来自 GitHub，已删除、转私有、Fork 或归档的仓库不再展示
-- 首屏展示一篇代表文章与一个自动排序的近期项目；项目排序仍参考 GitHub Star、默认分支最近提交和近 30 天活跃度
-- 正文顺序：项目 → 博客 → 小工具；导航“小工具”点击展开目录
-- 默认暖灰绿色浅色主题，卡片使用米灰色，支持深色；主题保存在浏览器本地
-- 主页与博客共用导航名称与深浅色偏好，移动端导航始终可见；主页使用钉子标志和蓝绿色主色
-- 响应式布局、键盘焦点、减少动效、404 页面
+- 保留灰绿色浅色主题、深色主题、鲨鱼头像与共享导航。
+- 首屏展示一篇代表文章与固定的代表作品 PostgreSQL 实验台，不按 Star 或提交活跃度轮换。
+- 首页将项目与工具合并为一个作品区：在线工具优先「打开使用」，同时保留「查看源码」；纯源码作品使用「查看项目」。默认展示四个作品，更多作品使用原生 details 展开。
+- 实验台与仓位助手使用真实界面截图；TOTP、Code Mate 使用紧凑图标。文章使用现有主题封面。
+- 访客打开主页或展开工具菜单均不请求 GitHub、不探测工具地址、不轮询、不重新排列内容。
+- 项目目录在部署时刷新；网络异常时使用已验证静态快照。主页菜单直接使用构建时目录，其他站点可按需读取 `/tools.json` 静态文件一次。
+- 保留 `/my-blog/`、`/#projects`、`/#tools`、公众号入口、RSS、键盘导航、减少动效与 404 页面。禁用 JavaScript 时主要内容、工具菜单与作品链接仍可用。
 
 ## 本地运行
 
@@ -29,26 +28,38 @@ npm run build
 npm run preview
 ```
 
-构建结果在 `dist/`。也可将 `dist/` 部署到其他静态托管平台。
+构建结果在 `dist/`，可部署到任意静态托管平台。
 
-## 内容维护
+## 内容与展示维护
 
 | 文件 | 内容 |
 | --- | --- |
-| `src/data/site.ts` | 个人资料、链接与旧项目文案兼容 |
-| 各项目仓库的 `homepage.json` | 项目展示信息、图标和可选工具入口 |
-| `src/data/repositories.json` | GitHub 元数据与仓库展示配置的离线快照 |
-| `public/project-icons/` | 同步到主页的图标，按内容哈希命名 |
-| `src/lib/catalog.mjs` | 统一仓库筛选与项目/工具目录 |
-| `src/lib/live-catalog.ts` | 浏览器动态核对与页面更新 |
-| `src/lib/recommendations.mjs` | 推荐排序与权重 |
-| `src/data/posts.ts` | 精选文章标题、摘要、日期和链接 |
-| `src/styles/global.css` | 浅色/深色颜色、布局与响应式样式 |
-| `src/pages/index.astro` | 首页布局 |
+| `src/data/site.ts` | 个人资料、链接与目录组装 |
+| `src/data/showcase.ts` | 固定代表作品、作品顺序、用途文案、主要功能与界面截图 |
+| `src/data/posts.ts` | 精选文章标题、摘要、日期、链接与主题封面 |
+| 各项目仓库的 `homepage.json` | 项目名称、展示信息、图标与可选在线入口 |
+| `src/data/repositories.json` | GitHub 元数据与项目展示配置的静态快照 |
+| `public/project-icons/` | 随快照保存的项目图标 |
+| `public/images/` | 头像、公众号二维码、文章封面和工具界面预览 |
+| `src/lib/catalog.mjs` | 构建时仓库筛选与项目/工具目录 |
+| `src/lib/works.mjs` | 合并源码与在线入口、应用固定展示顺序 |
+| `src/pages/index.astro` | 首页结构 |
+| `src/styles/global.css` | 主页业务布局、阅读字号与响应式样式 |
+| `packages/site-ui` | 跨站颜色、导航、页脚与主题行为的唯一来源 |
 
-项目无需手工录入：新增公开原创仓库会自动展示；`site.ts` 的项目条目只覆盖中文文案，不决定仓库是否存在。
+已发布作品仍由仓库快照决定：删除、转私有、Fork、归档或禁用的仓库不会因固定文案或截图配置而重新出现。新公开原创项目在下一次成功部署后进入目录，未指定顺序的项目按仓库名稳定排列。`featuredRepository` 只从现有作品中选择；该项目不再公开时隐藏推荐，不回退到随机活跃项目。
 
-每个项目在自己的仓库根目录维护 `homepage.json`，无需回主页添加项目或工具。项目卡片、小工具卡片和首屏推荐共用同一份名称、简介和图标。示例：
+用途简介只需在 `showcase.ts` 维护一份，作品区、首屏与工具菜单共用。已有作品的名称、图标和在线入口继续来自各自仓库的 `homepage.json`。
+
+### 界面预览
+
+`pg-playground-preview.webp` 来自 PostgreSQL 实验台的临时数据库与内置执行计划示例；`portfolio-pilot-preview.webp` 来自仓位助手的虚构演示，不含用户持仓或账号数据。图片裁去全站导航、版本信息等易变内容，只保留主要操作区。它们是静态展示素材，不随访客访问生成；工具界面发生较大变化时再替换即可。
+
+文章封面直接使用已有的 `btree-cleanup.webp`，保持约 2.35:1 比例。
+
+## 项目自行声明展示信息
+
+每个项目在仓库根目录维护 `homepage.json`：
 
 ```json
 {
@@ -60,71 +71,51 @@ npm run preview
   "icon": "./assets/homepage-icon.svg",
   "tool": {
     "url": "https://cznail.github.io/totp/",
-    "subtitle": "本地动态验证码",
     "features": ["多账号", "本地加密", "加密备份"],
     "status": "available"
   }
 }
 ```
 
-- `schemaVersion` 必须为 `1`；其余展示字段可省略。图标使用仓库内相对路径，支持 SVG、PNG、WebP、JPEG，最大 512 KiB；SVG 应为不含脚本或外部引用的独立文件。
-- `tool` 可省略：有它且 `status` 为 `available` 时提供工具入口；`development` 暂不发布。入口可为 HTTPS 地址或本站相对路径。不提供 `tool` 的仓库仍然是项目。
-- 图标随项目一起提交到默认分支。主页每小时同步元数据时，在同一提交读取配置和图标，将图片复制为本地静态资源；推送项目不会立刻更新主页，下一次成功部署后生效。无需配置跨仓库令牌或逐个访客请求配置。
-- 没有配置的项目沿用固定位置图案。声明工具但未提供图标时，项目和工具共用默认图标；图标加载失败也使用同一个默认图标。博客主推继续使用固定书页图案。
-- 配置或图标的 404 视为明确移除；暂时网络错误、限流或无效配置保留上次已验证内容。工作流缓存成功构建的快照及图标，缓存未命中时使用仓库内置快照。移除 `tool` 则撤下工具入口，保留项目。
-- `/tools.json` 由同一目录生成，继续供主页导航和博客菜单使用。仓库删除、转私有、归档或工具入口返回 404/410 时隐藏入口；暂时故障保留已发布内容。本站 Pages 工具还需 Pages 开启，其他 HTTPS 托管入口不要求 GitHub Pages。
+- `schemaVersion` 必须为 `1`；其他展示字段可省略。图标使用仓库内相对路径，支持独立 SVG、PNG、WebP、JPEG，最大 512 KiB；SVG 不得包含脚本或外部引用。
+- `tool` 可省略。声明 HTTPS 地址或本站相对路径，且状态为 `available` 时提供在线入口；纯源码项目仍可展示。
+- 部署在同一提交读取配置和图标，将图片复制为本地资源；无需逐个访客请求仓库配置。图标失败时使用默认图标。
+- 配置或图标的 404 视为明确移除；暂时网络错误、限流或无效配置保留上次已验证内容。入口 404/410 时只隐藏在线入口，保留源码作品。
+- `/tools.json`、主页工具菜单与作品按钮使用同一份目录。主页菜单不需要加载目录请求；其他使用 `/tools-menu.js` 的站点可读取一次静态目录，失败则保留构建好的入口。
 
+## GitHub Pages 部署
 
-## 自动推荐
+仓库：`czNail/cznail.github.io`。站点：`https://cznail.github.io/`。
 
-候选为本人公开、非 Fork、未归档、未禁用且有提交的仓库，排除主页和博客站点仓库。既有项目保留中文说明；其它项目使用 GitHub 名称和简介。匹配已发布工具时优先直达工具，其余直达仓库。
+推送 `main` 或手动运行 `Deploy homepage to GitHub Pages` 工作流时：
 
-评分为 `45% × Star 关注度 + 35% × 最近提交 + 20% × 活跃度`：
+1. 从 GitHub 读取公开项目及 `homepage.json`，刷新构建快照。
+2. 执行测试、类型检查和静态构建。
+3. 发布 GitHub Pages。
 
-- Star 使用 `log(1+stars) / (log(1+stars)+log(11))`，避免热门仓库永久霸占推荐。
-- 最近提交按默认分支提交时间指数衰减，时间常数为 30 天。
-- 活跃度计算近 30 天提交，最多计入最近 20 次，以对数缩放限制刷屏影响。
-- 首屏展示排序第一的项目，分数相同时以 Star、仓库名称保持确定顺序。
+不再每小时自动重建。项目新增、下线或调整展示信息后，手动触发部署或随下一次主页推送更新即可。工作流缓存最近成功快照与图标，缓存未命中时使用仓库快照；临时网络错误不会清空已验证目录。
 
-`npm run refresh:repos` 刷新本地快照。GitHub Actions 每小时第 17 分钟及推送时同步公开元数据后发布；实际运行时间受 GitHub 调度影响。主页打开时直接核对 GitHub 公开仓库列表，在前台每 5 分钟重新核对，所有分页成功后才替换推荐、正文项目和工具入口。仓库新增、删除、转私有或归档无需修改列表。浏览器只读取公开 API，不包含令牌；限流、离线或接口异常时保留最近同步内容，并显示核对失败提示。默认分支提交日期和活跃度由定时构建更新，浏览器核对保留这些已验证数据，新仓库未同步前不显示提交日期。
+本地刷新：
 
-工具需同时满足仓库配置声明、公开候选仓库及入口可用性。同步时核对工具地址，404/410 将隐藏工具入口；网络异常不等同于删除。公开目录 `/tools.json` 也使用同一筛选规则，博客菜单在展开时额外核对仓库及地址。关闭 JavaScript 时仍可浏览最近构建的内容。
+```sh
+npm run refresh:repos
+```
 
-## GitHub Pages
+根站点不设置仓库名 base；现有博客继续使用独立仓库与 `/my-blog/` 路径。不要在主页添加遮蔽博客的 `public/my-blog/` 目录。
 
-目标仓库为 `czNail/cznail.github.io`，目标地址为 `https://cznail.github.io/`。
+## 共享外观与验证
 
-1. 新建公开仓库 `cznail.github.io`，上传源码到 `main`。
-2. 仓库 Settings → Pages → Build and deployment，将 Source 设为 GitHub Actions。
-3. 推送到 `main` 或手动运行 Deploy homepage to GitHub Pages 工作流。
-4. 工作流执行类型检查、构建和部署。查看 Actions 中返回的站点地址。
+`packages/site-ui` 是主页、博客、TOTP 与仓位助手的共享视觉来源。其他站点使用带提交版本和 SHA-256 校验的生成副本；浏览器无需加载远程共享脚本。
 
-根站点不设置 `/仓库名/` base。现有 `my-blog` 仓库与 `/my-blog/` 博客保持独立。不要在本仓库添加会遮蔽博客的 `public/my-blog/` 目录。
+1. 在共享包修改语义颜色、导航或主题行为，更新包版本。
+2. 执行 `node scripts/sync-site-ui.mjs --manifest`、`npm test`、`npm run check`、`npm run build`。
+3. `Shared site visual checks` 工作流将本次共享源码用于四站构建，检查 375/1280px、浅色/深色、导航、菜单、跨站与跨标签主题，并上传截图。
+4. 消费者按原有工作流生成升级 PR，合并后随各站发布；不要手工修改生成副本。
 
-当前代码已准备部署；仓库创建和在线部署状态以 GitHub 的实际结果为准。
+本地跨站检查需要同级的 `homepage`、`my-blog`、`totp`、`portfolio-pilot` 四个仓库。用 `node scripts/sync-site-ui.mjs --from ../homepage` 在消费者加载本地共享源码，各自构建后在主页运行 `npm run test:visual`。截图位于 `artifacts/site-ui`。测试也覆盖主页不请求 GitHub、作品唯一、两个独立操作、静态预览图片加载和无 JavaScript 浏览。
 
-## 标志与公众号
+[样式预览页](https://cznail.github.io/style-guide/) 集中展示颜色、排版和控件。
 
-- `src/components/NailMark.astro` 与 `public/favicon.svg` 使用相同的倾斜钉子轮廓。
-- 首屏、文章区和页脚都有公众号入口。支持原生 dialog、Esc 关闭与焦点返回；禁用 JavaScript 时访问 `/wechat/` 独立关注页。
-- `public/images/wechat-qrcode.jpg` 直接使用用户提供的原图，不做换色或裁切。公众号名称与地址在 `src/data/site.ts` 中维护。
-- 项目和对应工具共用同一仓库图标；未声明图标的普通项目保留固定位置装饰；工具的状态检查使用正式站点地址，避免本地预览把不存在的挂载路径误判为下线。
+## 公众号
 
-## 装饰图案
-
-项目卡片使用 `src/components/PatternArt.astro` 中的四种固定 SVG 图案：圆环、方块、波纹和网格；博客主推卡片使用 `src/components/BlogArt.astro` 中的固定书页图案。它们是纯装饰，不依赖具体内容，自动适配深浅色。
-
-图案固定属于展示位置：项目第 1～4 个位置依次为圆环、方块、波纹、网格，后续位置按此布局重复；博客主推位置始终为书页图案。未配置仓库图标时，CSS 按位置展示项目图案；博客图案始终固定。配置了图标的项目及其工具共用仓库图标，无需在主页维护映射。增加文章只需在 `src/data/posts.ts` 维护标题、简介、链接、日期与分类；首屏推荐也直接使用这些数据。
-
-## 跨项目外观维护
-
-`packages/site-ui` 是主页、博客、TOTP 与仓位助手的共享视觉基础。主页直接使用源码，其他项目使用带提交版本和 SHA-256 校验的构建副本。主题、图标和导航均随各站部署，浏览器无需加载远程共享脚本。
-
-1. 修改共享包中的语义变量、公共组件或主题逻辑，更新 `package.json` 版本。
-2. 执行 `node scripts/sync-site-ui.mjs --manifest`、`npm test`、`npm run check` 和 `npm run build`。
-3. `Shared site visual checks` 工作流把本次共享源码接入四站构建，检查 375/1280px、浅色/深色、菜单、主题跨站与跨标签同步，上传截图供审查。
-4. 推送后，消费者每日检查上游，构建通过后自动创建副本升级 PR。合并升级 PR 后，各自发布新版。紧急同步可手动触发各仓库 `Update shared site UI` 工作流。
-
-[样式预览页](https://cznail.github.io/style-guide/) 集中展示颜色、排版与控件。截图检查用于发现视觉变化，仍需人工确认改版是否符合预期。
-
-本地跨站检查要求四个仓库位于同级目录（主页目录名为 `homepage`），各自构建后在主页执行 `npx playwright install chromium`、`npm run test:visual`。截图位于 `artifacts/site-ui`。
+公众号二维码继续使用 `public/images/wechat-qrcode.jpg` 原图，不换色或裁切。原生 dialog 支持 Esc 关闭与焦点返回；禁用 JavaScript 时访问 `/wechat/` 独立关注页。

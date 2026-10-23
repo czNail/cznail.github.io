@@ -24,13 +24,15 @@ const browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIG
 await mkdir('artifacts/site-ui', { recursive: true });
 try {
   for (const width of [375, 1280]) for (const theme of ['light', 'dark']) {
-    const context = await browser.newContext({ viewport: { width, height: 960 } });
+    const context = await browser.newContext({ viewport: { width, height: 960 }, reducedMotion: 'reduce' });
     await context.addInitScript(theme => localStorage.setItem('neil-homepage:theme', theme), theme);
     let reference;
     for (const path of ['/', '/my-blog/', '/totp/', '/portfolio-pilot/']) {
       const page = await context.newPage();
       const errors = [];
+      const githubRequests = [];
       page.on('pageerror', error => errors.push(error.message));
+      page.on('request', request => { if (new URL(request.url()).hostname === 'api.github.com') githubRequests.push(request.url()); });
       // Avoid live catalog requests in a deterministic local visual check.
       await page.route('**/api.github.com/**', route => route.abort());
       await page.goto(base + path, { waitUntil: 'networkidle' });
@@ -56,6 +58,25 @@ try {
       await page.keyboard.press('Escape');
       assert.equal(await page.locator('.site-ui-header details').getAttribute('open'), null);
       await summary.evaluate(element => element.blur());
+      if (path === '/') {
+        const cards = page.locator('#projects .project-card');
+        const repositories = await cards.evaluateAll(elements => elements.map(element => element.dataset.repository));
+        assert.equal(new Set(repositories).size, repositories.length, 'a work must only appear once');
+        assert.equal(repositories[0], 'pg-playground', 'editorial order');
+        const playground = page.locator('[data-catalog-preview] [data-repository="pg-playground"]');
+        assert.equal(await playground.locator('.work-primary').getAttribute('href'), 'https://cznail.github.io/pg-playground/');
+        assert.equal(await playground.locator('.source-link').getAttribute('href'), 'https://github.com/czNail/pg-playground');
+        assert.equal(await page.locator('.recommendation').getAttribute('data-repository'), 'pg-playground');
+        assert.equal(await page.locator('#tools').count(), 1, 'old tools deep link');
+        assert.deepEqual(githubRequests, [], 'homepage/menu must not contact GitHub');
+        for (const image of await page.locator('.project-preview img, .post-cover img').all()) {
+          await image.scrollIntoViewIfNeeded();
+          await image.evaluate(element => element.decode());
+          assert.ok(await image.evaluate(element => element.naturalWidth > 0), 'preview image must load');
+        }
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      }
       await page.screenshot({ path: `artifacts/site-ui/${path.replaceAll('/', '') || 'home'}-${width}-${theme}.png`, fullPage: true });
       // Long-form typography and client-side blog navigation need their own check.
       if (path === '/my-blog/' && width === 375 && theme === 'dark') {
@@ -82,6 +103,14 @@ try {
   await other.locator('[data-site-theme]').click();
   await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
   await context.close();
+  const noJS = await browser.newContext({ javaScriptEnabled: false, viewport: {width:375,height:960} });
+  const staticPage = await noJS.newPage();
+  await staticPage.goto(base + '/');
+  assert.equal(await staticPage.locator('.project-card').count() >= 4, true, 'works must render without JS');
+  await staticPage.locator('.site-ui-header summary').click();
+  assert.equal(await staticPage.locator('.site-ui-header .tools-popover').isVisible(), true, 'native menu works without JS');
+  assert.equal(await staticPage.locator('[data-repository="pg-playground"] .work-primary').getAttribute('href'), 'https://cznail.github.io/pg-playground/');
+  await noJS.close();
   console.log('Four sites: desktop/mobile, light/dark, navigation and cross-tab theme checks passed. Screenshots: artifacts/site-ui');
 } finally {
   await browser.close();

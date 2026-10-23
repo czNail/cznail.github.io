@@ -1,15 +1,20 @@
 ---
 import Icon from './Icon.astro';
-import PatternArt from './PatternArt.astro';
-interface Props { project: {repository:string;name:string;label:string;description:string;tags:string[];url:string;icon:string;image?:string} }
-const {project}=Astro.props;
+import RepositoryIcon from './RepositoryIcon.astro';
+interface Props { project: import('../lib/works.mjs').Work }
+const {project} = Astro.props;
+const primaryUrl = project.toolUrl || project.url;
 ---
-<a class="project-card" href={project.url} data-repository={project.repository}>
-  <PatternArt image={project.image} />
+<article class:list={['project-card', {'project-card-preview': project.preview}]} data-repository={project.repository}>
+  {project.preview && <div class="project-preview"><img src={project.preview} alt={project.previewAlt || ''} width="1106" height="618" loading="lazy" decoding="async" /></div>}
   <div class="project-body">
-    <div class="card-top"><span class="card-kind">{project.label}</span><Icon name="arrow" size={18}/></div>
-    <h3>{project.name}</h3><p>{project.description}</p>
-    <ul class="tags" aria-label="项目技术标签">{project.tags.map(tag => <li>{tag}</li>)}</ul>
-    <span class="source-link">查看源码 <Icon name="arrow" size={14}/></span>
+    <div class="card-top"><span class="card-kind">{project.label}</span><RepositoryIcon image={project.image} icon={project.icon} size={26}/></div>
+    <h3><a href={primaryUrl}>{project.name}</a></h3>
+    <p>{project.description}</p>
+    <ul class="tags" aria-label="主要功能">{project.features.slice(0, 3).map(feature => <li>{feature}</li>)}</ul>
+    <div class="project-actions">
+      <a class="work-primary" href={primaryUrl} aria-label={`${project.toolUrl ? '打开使用' : '查看项目'}：${project.name}`}>{project.toolUrl ? '打开使用' : '查看项目'} <Icon name="right" size={16}/></a>
+      {project.toolUrl && <a class="source-link" href={project.url} aria-label={`查看源码：${project.name}`}>查看源码 <Icon name="arrow" size={14}/></a>}
+    </div>
   </div>
-</a>
+</article>

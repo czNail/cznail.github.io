@@ -1,5 +1,7 @@
 import snapshot from './repositories.json';
 import { createCatalog } from '../lib/catalog.mjs';
+import { createWorks } from '../lib/works.mjs';
+import { showcase, featuredRepository } from './showcase';
 export const profile = {
   name: '木匠钉子',
   englishName: 'Neil Chen',
@@ -25,4 +27,10 @@ export const projectDetails = [
 ];
 
 // 仓库 homepage.json 的同步快照供正文、下拉菜单和 /tools.json 共用。
-export const { projects, tools } = createCatalog(snapshot.repositories, projectDetails);
+const catalog = createCatalog(snapshot.repositories, projectDetails);
+export const works = createWorks(catalog.projects, catalog.tools, showcase);
+export const featuredWork = works.find(work => work.repository.toLowerCase() === featuredRepository);
+// Reuse the editorial copy in the header and the public static catalog.
+export const tools = catalog.tools.map(tool => ({...tool,
+  description: works.find(work => work.repository === tool.repository)?.description || tool.description,
+}));

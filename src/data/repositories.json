@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-22T09:25:31.164Z",
+  "fetchedAt": "2026-10-23T07:32:15.411Z",
   "repositories": [
     {
       "name": "code-mate",
@@ -33,6 +33,46 @@
         "2026-09-04T08:14:47Z",
         "2026-09-04T08:14:34Z",
         "2026-09-04T08:14:16Z"
+      ]
+    },
+    {
+      "name": "pg-playground",
+      "url": "https://github.com/czNail/pg-playground",
+      "description": "PostgreSQL 在线实验台",
+      "language": "TypeScript",
+      "stars": 0,
+      "hasPages": true,
+      "defaultBranch": "main",
+      "revision": "d7018aff6901918df10c0c500825bdb943ee63f8",
+      "presentation": {
+        "name": "PostgreSQL 实验台",
+        "description": "在浏览器里运行 SQL、探索表结构、比较执行计划，数据保存在本地。",
+        "label": "数据库工具",
+        "tags": [
+          "PostgreSQL",
+          "PGlite",
+          "本地运行"
+        ],
+        "tool": {
+          "url": "https://cznail.github.io/pg-playground/",
+          "subtitle": "打开即用的 PostgreSQL 实验环境",
+          "features": [
+            "SQL 编辑器",
+            "执行计划",
+            "9 种扩展"
+          ],
+          "status": "available"
+        },
+        "image": "/project-icons/pg-playground-d94f16a4e457811c337b3e700d6a51c6b0df9cc1.svg"
+      },
+      "lastCommitAt": "2026-10-23T03:05:03Z",
+      "recentCommitDates": [
+        "2026-10-23T03:05:03Z",
+        "2026-10-23T02:40:36Z",
+        "2026-10-23T02:38:29Z",
+        "2026-10-23T02:04:12Z",
+        "2026-10-23T01:43:31Z",
+        "2026-10-23T01:16:11Z"
       ]
     },
     {

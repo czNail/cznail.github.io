@@ -13,7 +13,7 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#e8ece5" />
+    <meta name="theme-color" content="#edf0e9" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <meta property="og:type" content="website" />
@@ -24,7 +24,7 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
   </head>
   <body>
     <a class="skip-link" href="#main">跳到正文</a>
-    <Fragment set:html={headerMarkup({ active: Astro.url.pathname === "/" ? "home" : "", tools })} />
+    <Fragment set:html={headerMarkup({ active: Astro.url.pathname === "/" ? "home" : "", tools, staticTools: true })} />
     <script is:inline src="/tools-menu.js" defer></script>
     <slot />
     <Fragment set:html={footerMarkup()} />

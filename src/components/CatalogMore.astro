@@ -1,7 +1,7 @@
 ---
 interface Props {kind: 'projects' | 'tools'; total: number; hasMore: boolean}
 const {kind, total, hasMore} = Astro.props;
-const label = kind === 'projects' ? '项目' : '工具';
+const label = kind === 'projects' ? '作品' : '工具';
 ---
 <details class="catalog-more" data-catalog-more={kind} hidden={!hasMore}>
   <summary><span class="catalog-expand">查看全部{label}（<span data-catalog-count>{total}</span>）<span aria-hidden="true"> ↗</span></span><span class="catalog-collapse">收起{label} <span aria-hidden="true">↑</span></span></summary>

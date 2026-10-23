@@ -5,7 +5,13 @@ export const posts = [
     "description": "从一次阻止了 HOT 的普通 UPDATE 出发，解释 Unique Index 为什么允许重复 Key、B-tree 如何在插入路径上清理旧版本，以及 VACUUM 清理完成之后，空间为什么仍可能留在 Index 文件里。",
     "url": "https://cznail.github.io/my-blog/posts/b-tree-%E9%87%8C%E7%9A%84%E9%87%8D%E5%A4%8D-key-%E4%B8%8E%E6%97%A7%E8%AE%B0%E5%BD%95%E7%9A%84%E6%B8%85%E7%90%86/",
     "date": "2026-10-17",
-    "category": "PostgreSQL"
+    "category": "PostgreSQL",
+    "cover": {
+      "src": "/images/btree-cleanup.webp",
+      "alt": "B-tree 清理主题插画：清理文件盒旁的旧卡片",
+      "width": 1921,
+      "height": 819
+    }
   },
   {
     "title": "COMMIT 返回之前，PostgreSQL 到底在等什么？",

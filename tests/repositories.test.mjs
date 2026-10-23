@@ -1,22 +1,9 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {rankRepositories} from '../src/lib/recommendations.mjs';
 import {collectRepositories,isEligible} from '../scripts/refresh-repositories.mjs';
 
 const now=Date.parse('2026-10-20T00:00:00Z');
 const repo=(name,days,stars=0,commits=0)=>({name,url:`https://github.com/czNail/${name}`,description:'',language:null,stars,lastCommitAt:new Date(now-days*86400000).toISOString(),recentCommitDates:Array.from({length:commits},()=>new Date(now-86400000).toISOString())});
-test('同为零 Star 时，最近提交优先；活跃度和 Star 均影响排序',()=>{
-  assert.equal(rankRepositories([repo('old',100),repo('new',1)],now)[0].name,'new');
-  assert.equal(rankRepositories([repo('quiet',1),repo('active',1,0,10)],now)[0].name,'active');
-  assert.equal(rankRepositories([repo('quiet',1),repo('popular',1,100)],now)[0].name,'popular');
-});
-test('活跃度截断为20，未来或无效的提交不增加活跃度，排序确定',()=>{
-  const many=rankRepositories([repo('a',1,0,20),repo('b',1,0,200)],now);
-  assert.equal(many[0].score,many[1].score);
-  const unusual={...repo('bad',1),lastCommitAt:'invalid',stars:NaN,recentCommitDates:['invalid','2099-01-01']};
-  const result=rankRepositories([unusual],now)[0];assert.equal(result.score,0);assert.equal(result.recentCommits,0);
-  assert.deepEqual(rankRepositories([repo('b',1),repo('a',1)],now).map(r=>r.name),['a','b']);
-});
 const raw=name=>({name,owner:{login:'czNail'},private:false,fork:false,archived:false,disabled:false,size:1,default_branch:'main',description:'description',stargazers_count:3,language:'TypeScript'});
 test('仅收录本人公开原创且可用的项目，排除私有、Fork、归档与主页博客',()=>{
   assert.equal(isEligible(raw('visible')),true);
