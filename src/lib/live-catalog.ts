@@ -4,6 +4,7 @@ import { setRepositoryImage, startImageFallbacks } from './repository-images';
 import { profile, projectDetails } from '../data/site';
 import { createCatalog, listRepositories, repositoryMetadata } from './catalog.mjs';
 import { rankRepositories } from './recommendations.mjs';
+import { catalogPreview } from './catalog-preview.mjs';
 
 type Repository = import('./catalog.mjs').Repository;
 const interval = 5 * 60 * 1000;
@@ -18,6 +19,15 @@ function empty(message: string) {
   const node = document.createElement('p'); node.className = 'recommendation-empty'; node.textContent = message;
   return node;
 }
+function renderGroup(kind: 'projects' | 'tools', cards: HTMLElement[], message: string) {
+  const {preview, remaining, total} = catalogPreview(cards, kind);
+  document.querySelector(`[data-catalog-preview="${kind}"]`)!.replaceChildren(...(preview.length ? preview : [empty(message)]));
+  document.querySelector(`[data-catalog-overflow="${kind}"]`)!.replaceChildren(...remaining);
+  const more = document.querySelector<HTMLDetailsElement>(`[data-catalog-more="${kind}"]`)!;
+  more.hidden = !remaining.length;
+  if (!remaining.length) more.open = false;
+  text(more, '[data-catalog-count]', String(total));
+}
 function render(repositories: Repository[]) {
   const catalog = createCatalog(repositories, projectDetails);
   const projects = catalog.projects.map(project => {
@@ -28,7 +38,7 @@ function render(repositories: Repository[]) {
     card.querySelector('.tags')!.replaceChildren(...tags);
     return card;
   });
-  document.querySelector('.project-grid')!.replaceChildren(...(projects.length ? projects : [empty('暂时没有可展示的公开项目。')]));
+  renderGroup('projects', projects, '暂时没有可展示的公开项目。');
   const recommendations = rankRepositories(repositories).slice(0,1).map((repo, index) => {
     const project = catalog.projects.find(item => item.repository === repo.name)!;
     const tool = catalog.tools.find(item => item.repository === repo.name);
@@ -53,7 +63,7 @@ function render(repositories: Repository[]) {
     setRepositoryImage(card.querySelector('.repository-visual')!,tool.image);
     return card;
   });
-  document.querySelector('.tools-grid')!.replaceChildren(...(tools.length ? tools : [empty('暂时没有已发布的小工具。')]));
+  renderGroup('tools', tools, '暂时没有已发布的小工具。');
   document.querySelectorAll('[data-tools-list]').forEach(list => {
     const links = catalog.tools.map(tool => {
       const link = document.createElement('a'); link.href = tool.url; link.dataset.repository = tool.repository;
