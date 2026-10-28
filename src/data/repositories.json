@@ -36,59 +36,6 @@
       ]
     },
     {
-      "name": "pg-handbook",
-      "url": "https://github.com/czNail/pg-handbook",
-      "description": "PostgreSQL 生态、迁移升级、性能优化与运维实践",
-      "language": "JavaScript",
-      "stars": 0,
-      "hasPages": true,
-      "defaultBranch": "main",
-      "revision": "82e2f81993c2bd5b4fa51757cb0ecbbb795010d4",
-      "presentation": {
-        "name": "PG 工程手册",
-        "description": "围绕迁移升级、性能诊断与持续运维，串联 PostgreSQL 原理、工程手册、生态选型和交付模板。",
-        "label": "数据库工程",
-        "tags": [
-          "PostgreSQL",
-          "迁移与运维",
-          "工程知识库"
-        ],
-        "tool": {
-          "url": "https://cznail.github.io/pg-handbook/",
-          "subtitle": "",
-          "features": [
-            "工程手册",
-            "生态选型",
-            "交付工具"
-          ],
-          "status": "available"
-        },
-        "image": "/project-icons/pg-handbook-6f832d952379c2e7aed8d3a06f83153747da9857.svg"
-      },
-      "lastCommitAt": "2026-10-28T05:46:26Z",
-      "recentCommitDates": [
-        "2026-10-28T05:46:26Z",
-        "2026-10-28T05:42:37Z",
-        "2026-10-28T05:37:50Z",
-        "2026-10-28T05:33:36Z",
-        "2026-10-28T05:09:58Z",
-        "2026-10-28T05:08:02Z",
-        "2026-10-28T05:04:14Z",
-        "2026-10-28T05:03:39Z",
-        "2026-10-28T05:01:49Z",
-        "2026-10-28T05:00:49Z",
-        "2026-10-28T04:57:27Z",
-        "2026-10-28T04:49:55Z",
-        "2026-10-28T04:45:01Z",
-        "2026-10-28T03:56:42Z",
-        "2026-10-28T03:54:55Z",
-        "2026-10-28T03:53:31Z",
-        "2026-10-28T03:51:44Z",
-        "2026-10-28T03:42:37Z",
-        "2026-10-28T03:22:03Z"
-      ]
-    },
-    {
       "name": "pg-playground",
       "url": "https://github.com/czNail/pg-playground",
       "description": "PostgreSQL 在线实验台",
