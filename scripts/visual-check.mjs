@@ -74,11 +74,17 @@ try {
         assert.equal(await page.locator('.featured-post').getAttribute('href'), latest.url, 'writing card uses the same latest article');
         assert.equal(await page.locator('.post-cover .pattern-reading').isVisible(), true, 'fixed book art');
         assert.equal(await page.locator('.post-cover img').count(), 0, 'article cover does not replace the book art');
-        for (const image of await page.locator('.project-preview img, .post-cover img').all()) {
+        // Lazy previews in the native "more works" disclosure only load after
+        // it opens. Waiting to scroll a hidden image can otherwise hang CI.
+        const moreWorks = page.locator('[data-catalog-more="projects"]');
+        const expandWorks = await moreWorks.isVisible();
+        if (expandWorks) await moreWorks.locator('summary').click();
+        for (const image of await page.locator('.project-preview img:visible, .post-cover img:visible').all()) {
           await image.scrollIntoViewIfNeeded();
           await image.evaluate(element => element.decode());
           assert.ok(await image.evaluate(element => element.naturalWidth > 0), 'preview image must load');
         }
+        if (expandWorks) await moreWorks.locator('summary').click();
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       }
