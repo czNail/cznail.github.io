@@ -2,43 +2,6 @@
   "fetchedAt": "2026-10-28T06:05:23.019Z",
   "repositories": [
     {
-      "name": "ballance-web",
-      "url": "https://github.com/czNail/ballance-web",
-      "description": "A browser-based 3D balance ball game",
-      "language": "HTML",
-      "stars": 0,
-      "hasPages": true,
-      "defaultBranch": "main",
-      "revision": "e2756916482113da22e53125b42a24ebdab8ba6d",
-      "presentation": {
-        "category": "game",
-        "name": "BALANCE · 云端之间",
-        "description": "控制小球穿过悬空木桥，感受惯性、刹车与侧风，完成三段平衡挑战。",
-        "label": "小游戏",
-        "tags": [
-          "平衡球",
-          "3D",
-          "单机游戏"
-        ],
-        "tool": {
-          "url": "https://cznail.github.io/ballance-web/",
-          "subtitle": "",
-          "features": [
-            "三段旅程",
-            "三种材质",
-            "键盘与触屏"
-          ],
-          "status": "available"
-        },
-        "image": "/project-icons/ballance-web-5a190af9045ce14e3aa8e98881f39f3ca7f499f3.svg"
-      },
-      "lastCommitAt": "2026-10-28T06:03:02Z",
-      "recentCommitDates": [
-        "2026-10-28T06:03:02Z",
-        "2026-10-28T05:57:43Z"
-      ]
-    },
-    {
       "name": "code-mate",
       "url": "https://github.com/czNail/code-mate",
       "description": "一个评审或理解系统模块设计的skill",

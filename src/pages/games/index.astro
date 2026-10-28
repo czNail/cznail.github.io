@@ -12,7 +12,7 @@ import { games } from '../../data/site';
         <a class="game-preview" href={game.toolUrl} aria-label={`开始游戏：${game.name}`}><img src={game.preview || game.image} alt={game.previewAlt || game.name} width="960" height="540" decoding="async"/><span class="game-play" aria-hidden="true">▷</span></a>
         <div class="game-copy"><p class="eyebrow">01 / 平衡与专注</p><h2>{game.name}</h2><p>{game.description}</p><ul class="tags" aria-label="游戏特点">{game.features.map(feature => <li>{feature}</li>)}</ul><div class="game-actions"><a class="button primary" href={game.toolUrl}>开始游戏 <Icon name="right" size={17}/></a><a class="text-link" href={game.url}>查看源码 <Icon name="arrow" size={15}/></a></div><p class="game-controls">方向键 / WASD 移动 · 空格刹车 · 手机使用触屏摇杆</p></div>
       </article>)}
-      {!games.length && <p class="section-note">小游戏正在准备中，很快见。</p>}
+      {!games.length && <p class="section-note">目前没有公开展示的小游戏。</p>}
     </div>
     <p class="games-note">无需登录，打开就能玩。成绩保存在当前浏览器中。</p>
   </main>
