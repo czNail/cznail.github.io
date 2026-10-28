@@ -1,4 +1,4 @@
-/** @typedef {{name?:string,description?:string,label?:string,tags?:string[],image?:string,tool?:{url:string,subtitle:string,features:string[],status:string}}} Presentation */
+/** @typedef {{name?:string,description?:string,label?:string,category?:string,tags?:string[],image?:string,tool?:{url:string,subtitle:string,features:string[],status:string}}} Presentation */
 const string = (value, limit) => typeof value === 'string' ? value.trim().slice(0, limit) : '';
 /** @param {unknown} value */
 export function toolUrl(value) {
@@ -20,6 +20,7 @@ export function iconPath(value) {
 export function normalizePresentation(data) {
   if (!data || typeof data !== 'object' || Array.isArray(data) || data.schemaVersion !== 1) throw Error('Unsupported homepage.json');
   const result = {iconPath: iconPath(data.icon)};
+  if (data.category === 'game') result.category = 'game';
   for (const key of ['name','description','label']) {
     const value = string(data[key], key === 'description' ? 500 : 80);
     if (value) result[key] = value;
@@ -34,3 +35,4 @@ export function normalizePresentation(data) {
   }
   return result;
 }
+

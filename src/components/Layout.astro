@@ -24,10 +24,11 @@ const { title = '木匠钉子 · Neil Chen', description = '木匠钉子(Neil Ch
   </head>
   <body>
     <a class="skip-link" href="#main">跳到正文</a>
-    <Fragment set:html={headerMarkup({ active: Astro.url.pathname === "/" ? "home" : "", tools, staticTools: true })} />
+    <Fragment set:html={headerMarkup({ active: Astro.url.pathname === "/" ? "home" : Astro.url.pathname.startsWith('/games') ? 'games' : "", tools, staticTools: true })} />
     <script is:inline src="/tools-menu.js" defer></script>
     <slot />
     <Fragment set:html={footerMarkup()} />
     <WeChatDialog />
   </body>
 </html>
+

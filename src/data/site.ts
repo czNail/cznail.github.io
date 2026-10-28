@@ -30,7 +30,11 @@ export const projectDetails = [
 const catalog = createCatalog(snapshot.repositories, projectDetails);
 export const works = createWorks(catalog.projects, catalog.tools, showcase);
 export const featuredWork = works.find(work => work.repository.toLowerCase() === featuredRepository);
+// Games share the repository catalog, with a dedicated navigation destination.
+const gameRepositories = new Set(works.filter(work => work.category === 'game').map(work => work.repository));
+export const games = works.filter(work => gameRepositories.has(work.repository) && work.toolUrl);
 // Reuse the editorial copy in the header and the public static catalog.
-export const tools = catalog.tools.map(tool => ({...tool,
+export const tools = catalog.tools.filter(tool => !gameRepositories.has(tool.repository)).map(tool => ({...tool,
   description: works.find(work => work.repository === tool.repository)?.description || tool.description,
 }));
+

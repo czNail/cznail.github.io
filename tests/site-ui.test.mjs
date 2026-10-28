@@ -58,3 +58,9 @@ test('static menus carry their catalog without a browser refresh and keep old an
   assert.match(html, /href="\/pg-playground\/"/);
   assert.doesNotMatch(headerMarkup(), /data-tools-static/);
 });
+test('games has its own current navigation state without marking the tools menu', () => {
+  const html = headerMarkup({active:'games'});
+  assert.match(html, /href="\/games\/" aria-current="page">小游戏/);
+  assert.doesNotMatch(html, /data-current-section="tools"/);
+});
+

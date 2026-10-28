@@ -3,6 +3,12 @@ export const featuredRepository = 'pg-playground';
 export const showcase = {
   order: ['pg-playground', 'pg-handbook', 'portfolio-pilot', 'totp', 'code-mate'],
   details: {
+    'ballance-web': {
+      description: '控制小球穿过悬空木桥，在惯性、刹车和侧风之间找到平衡。',
+      features: ['三段旅程', '三种材质', '键盘与触屏'],
+      preview: '/images/ballance-preview.svg',
+      previewAlt: '云端之间关卡示意：悬空木桥、木球、检查点与终点',
+    },
     'pg-handbook': {
       description: '沿着迁移、性能、恢复和运维四条工程主线，串联原理、实施、验证证据与交付模板。',
       features: ['工程手册', '生态选型', '交付工具'],
@@ -29,3 +35,4 @@ export const showcase = {
     },
   },
 };
+

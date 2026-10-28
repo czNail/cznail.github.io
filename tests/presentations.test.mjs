@@ -10,6 +10,16 @@ const manifest={schemaVersion:1,name:'同一名称',icon:'./assets/icon.svg',too
 const repo=()=>({name:'new',url:'https://github.com/czNail/new',description:'说明',language:'TypeScript',stars:0,hasPages:true,revision:'a'.repeat(40),lastCommitAt:null,recentCommitDates:[]});
 const failure=status=>Object.assign(Error('request failed'),{status});
 
+test('game category survives manifest synchronization and honors publication availability',async()=>{
+ const repositories=[repo()];
+ await syncPresentations(repositories,async path=>file(path.includes('homepage.json')?JSON.stringify({...manifest,category:'game'}):svg),async()=>{});
+ const catalog=createCatalog(repositories);
+ assert.equal(catalog.projects[0].category,'game');
+ assert.equal(catalog.tools.length,1);
+ assert.equal(createCatalog([{...repositories[0],pageAvailable:false}]).tools.length,0);
+ assert.equal(normalizePresentation({...manifest,category:'unknown'}).category,undefined);
+});
+
 test('新增仓库自行声明工具，项目和工具使用同一份名称及本地图标，查询固定提交',async()=>{
  const repositories=[repo()],saved=[],calls=[];
  await syncPresentations(repositories,async path=>{calls.push(path);return file(path.includes('homepage.json')?JSON.stringify(manifest):svg);},async(name,bytes)=>saved.push({name,bytes}));
@@ -60,3 +70,4 @@ test('工具未配置专属图标时，项目和工具共用默认图标',()=>{
  assert.equal(catalog.projects[0].image,'/project-icons/default.svg');
  assert.equal(catalog.tools[0].image,catalog.projects[0].image);
 });
+

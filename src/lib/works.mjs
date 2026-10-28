@@ -1,4 +1,4 @@
-/** @typedef {{repository:string,name:string,label:string,description:string,tags:string[],url:string,icon:string,image?:string}} Project */
+/** @typedef {{repository:string,name:string,label:string,category?:string,description:string,tags:string[],url:string,icon:string,image?:string}} Project */
 /** @typedef {{repository:string,url:string,features:string[]}} Tool */
 /** @typedef {{description?:string,features?:string[],preview?:string,previewAlt?:string}} WorkDetails */
 /** @typedef {Project & {toolUrl?:string,features:string[],preview?:string,previewAlt?:string}} Work */
@@ -20,3 +20,4 @@ export function createWorks(projects, tools, {order = [], details = {}} = {}) {
   }).sort((a, b) => (positions.get(a.repository.toLowerCase()) ?? Infinity) -
     (positions.get(b.repository.toLowerCase()) ?? Infinity) || a.repository.localeCompare(b.repository, 'en'));
 }
+

@@ -1,6 +1,43 @@
 {
-  "fetchedAt": "2026-10-23T07:32:15.411Z",
+  "fetchedAt": "2026-10-28T06:05:23.019Z",
   "repositories": [
+    {
+      "name": "ballance-web",
+      "url": "https://github.com/czNail/ballance-web",
+      "description": "A browser-based 3D balance ball game",
+      "language": "HTML",
+      "stars": 0,
+      "hasPages": true,
+      "defaultBranch": "main",
+      "revision": "e2756916482113da22e53125b42a24ebdab8ba6d",
+      "presentation": {
+        "category": "game",
+        "name": "BALANCE · 云端之间",
+        "description": "控制小球穿过悬空木桥，感受惯性、刹车与侧风，完成三段平衡挑战。",
+        "label": "小游戏",
+        "tags": [
+          "平衡球",
+          "3D",
+          "单机游戏"
+        ],
+        "tool": {
+          "url": "https://cznail.github.io/ballance-web/",
+          "subtitle": "",
+          "features": [
+            "三段旅程",
+            "三种材质",
+            "键盘与触屏"
+          ],
+          "status": "available"
+        },
+        "image": "/project-icons/ballance-web-5a190af9045ce14e3aa8e98881f39f3ca7f499f3.svg"
+      },
+      "lastCommitAt": "2026-10-28T06:03:02Z",
+      "recentCommitDates": [
+        "2026-10-28T06:03:02Z",
+        "2026-10-28T05:57:43Z"
+      ]
+    },
     {
       "name": "code-mate",
       "url": "https://github.com/czNail/code-mate",
@@ -36,6 +73,59 @@
       ]
     },
     {
+      "name": "pg-handbook",
+      "url": "https://github.com/czNail/pg-handbook",
+      "description": "PostgreSQL 生态、迁移升级、性能优化与运维实践",
+      "language": "JavaScript",
+      "stars": 0,
+      "hasPages": true,
+      "defaultBranch": "main",
+      "revision": "82e2f81993c2bd5b4fa51757cb0ecbbb795010d4",
+      "presentation": {
+        "name": "PG 工程手册",
+        "description": "围绕迁移升级、性能诊断与持续运维，串联 PostgreSQL 原理、工程手册、生态选型和交付模板。",
+        "label": "数据库工程",
+        "tags": [
+          "PostgreSQL",
+          "迁移与运维",
+          "工程知识库"
+        ],
+        "tool": {
+          "url": "https://cznail.github.io/pg-handbook/",
+          "subtitle": "",
+          "features": [
+            "工程手册",
+            "生态选型",
+            "交付工具"
+          ],
+          "status": "available"
+        },
+        "image": "/project-icons/pg-handbook-6f832d952379c2e7aed8d3a06f83153747da9857.svg"
+      },
+      "lastCommitAt": "2026-10-28T05:46:26Z",
+      "recentCommitDates": [
+        "2026-10-28T05:46:26Z",
+        "2026-10-28T05:42:37Z",
+        "2026-10-28T05:37:50Z",
+        "2026-10-28T05:33:36Z",
+        "2026-10-28T05:09:58Z",
+        "2026-10-28T05:08:02Z",
+        "2026-10-28T05:04:14Z",
+        "2026-10-28T05:03:39Z",
+        "2026-10-28T05:01:49Z",
+        "2026-10-28T05:00:49Z",
+        "2026-10-28T04:57:27Z",
+        "2026-10-28T04:49:55Z",
+        "2026-10-28T04:45:01Z",
+        "2026-10-28T03:56:42Z",
+        "2026-10-28T03:54:55Z",
+        "2026-10-28T03:53:31Z",
+        "2026-10-28T03:51:44Z",
+        "2026-10-28T03:42:37Z",
+        "2026-10-28T03:22:03Z"
+      ]
+    },
+    {
       "name": "pg-playground",
       "url": "https://github.com/czNail/pg-playground",
       "description": "PostgreSQL 在线实验台",
@@ -43,7 +133,7 @@
       "stars": 0,
       "hasPages": true,
       "defaultBranch": "main",
-      "revision": "d7018aff6901918df10c0c500825bdb943ee63f8",
+      "revision": "ba4b337005401c84c2318ce20f43971b20dbf5fa",
       "presentation": {
         "name": "PostgreSQL 实验台",
         "description": "在浏览器里运行 SQL、探索表结构、比较执行计划，数据保存在本地。",
@@ -65,8 +155,12 @@
         },
         "image": "/project-icons/pg-playground-d94f16a4e457811c337b3e700d6a51c6b0df9cc1.svg"
       },
-      "lastCommitAt": "2026-10-23T03:05:03Z",
+      "lastCommitAt": "2026-10-23T09:28:35Z",
       "recentCommitDates": [
+        "2026-10-23T09:28:35Z",
+        "2026-10-23T09:27:11Z",
+        "2026-10-23T07:49:39Z",
+        "2026-10-23T07:43:02Z",
         "2026-10-23T03:05:03Z",
         "2026-10-23T02:40:36Z",
         "2026-10-23T02:38:29Z",
@@ -83,7 +177,7 @@
       "stars": 0,
       "hasPages": true,
       "defaultBranch": "main",
-      "revision": "e78232949a61ea6c570254472d9df67e9cd44718",
+      "revision": "ada812e844db0fe580b37b71d32d7b3be716134b",
       "presentation": {
         "name": "仓位助手",
         "description": "把资产比例、定投与再平衡放在一起，做一个自己用得顺手的仓位工具。",
@@ -105,8 +199,13 @@
         },
         "image": "/project-icons/portfolio-pilot-b8e04b80cd992ea64d41b71e153bf22917a6df20.svg"
       },
-      "lastCommitAt": "2026-10-22T09:25:26Z",
+      "lastCommitAt": "2026-10-26T00:56:50Z",
       "recentCommitDates": [
+        "2026-10-26T00:56:50Z",
+        "2026-10-25T08:33:59Z",
+        "2026-10-24T12:27:40Z",
+        "2026-10-23T07:54:43Z",
+        "2026-10-23T07:50:34Z",
         "2026-10-22T09:25:26Z",
         "2026-10-21T12:21:17Z",
         "2026-10-21T01:36:25Z",
@@ -126,7 +225,7 @@
       "stars": 0,
       "hasPages": true,
       "defaultBranch": "main",
-      "revision": "e23da7d1cf483f22656ca044cb880188d156b99e",
+      "revision": "6adcf3917ca0ce9f2fa131ff515ca5ebe73ef983",
       "presentation": {
         "name": "TOTP 验证器",
         "description": "在浏览器里管理动态验证码，探索本地加密、备份与简单交互之间的平衡。",
@@ -148,8 +247,12 @@
         },
         "image": "/project-icons/totp-24efc01396c5b32790f04fe704bb046ee9203610.svg"
       },
-      "lastCommitAt": "2026-10-22T09:25:23Z",
+      "lastCommitAt": "2026-10-26T00:57:07Z",
       "recentCommitDates": [
+        "2026-10-26T00:57:07Z",
+        "2026-10-23T08:41:52Z",
+        "2026-10-23T07:36:32Z",
+        "2026-10-23T07:33:09Z",
         "2026-10-22T09:25:23Z",
         "2026-10-21T12:21:16Z",
         "2026-10-21T06:51:33Z",
