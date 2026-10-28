@@ -1,8 +1,12 @@
 // Stable editorial choices. Repository availability still comes from the build snapshot.
 export const featuredRepository = 'pg-playground';
 export const showcase = {
-  order: ['pg-playground', 'portfolio-pilot', 'totp', 'code-mate'],
+  order: ['pg-playground', 'pg-handbook', 'portfolio-pilot', 'totp', 'code-mate'],
   details: {
+    'pg-handbook': {
+      description: '沿着迁移、性能、恢复和运维四条工程主线，串联原理、实施、验证证据与交付模板。',
+      features: ['工程手册', '生态选型', '交付工具'],
+    },
     'pg-playground': {
       description: '在浏览器里运行 SQL，查看表结构与执行计划。无需安装，数据保存在本地。',
       features: ['SQL 编辑器', '执行计划', '本地保存'],
