@@ -6,7 +6,7 @@ import { toolUrl } from './presentation.mjs';
 /** @typedef {{id:string,repository:string,name:string,subtitle:string,description:string,status:string,url:string,features:string[],icon?:string,image?:string}} Tool */
 
 export const owner = 'czNail';
-const excluded = new Set(['my-blog', 'cznail.github.io', 'ballance-web']);
+const excluded = new Set(['my-blog', 'cznail.github.io', 'ballance-web', 'pg-handbook']);
 
 export function isEligible(repo) {
   return repo.owner?.login?.toLowerCase() === owner.toLowerCase() && repo.private === false &&
