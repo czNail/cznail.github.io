@@ -115,11 +115,12 @@ try {
   await other.goto(base + '/');
   await other.locator('[data-site-theme]').click();
   await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
+  const workCount = await other.locator('.project-card').count();
   await context.close();
   const noJS = await browser.newContext({ javaScriptEnabled: false, viewport: {width:375,height:960} });
   const staticPage = await noJS.newPage();
   await staticPage.goto(base + '/');
-  assert.equal(await staticPage.locator('.project-card').count() >= 4, true, 'works must render without JS');
+  assert.equal(await staticPage.locator('.project-card').count(), workCount, 'all works must render without JS');
   await staticPage.locator('.site-ui-header summary').click();
   assert.equal(await staticPage.locator('.site-ui-header .tools-popover').isVisible(), true, 'native menu works without JS');
   assert.equal(await staticPage.locator('[data-repository="pg-playground"] .work-primary').getAttribute('href'), 'https://cznail.github.io/pg-playground/');
