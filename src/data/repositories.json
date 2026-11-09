@@ -80,54 +80,6 @@
       ]
     },
     {
-      "name": "portfolio-pilot",
-      "url": "https://github.com/czNail/portfolio-pilot",
-      "description": "仓位助手：资产配置、固定收益规划及再平衡",
-      "language": "TypeScript",
-      "stars": 0,
-      "hasPages": true,
-      "defaultBranch": "main",
-      "revision": "ada812e844db0fe580b37b71d32d7b3be716134b",
-      "presentation": {
-        "name": "仓位助手",
-        "description": "把资产比例、定投与再平衡放在一起，做一个自己用得顺手的仓位工具。",
-        "label": "资产配置",
-        "tags": [
-          "TypeScript",
-          "资产配置"
-        ],
-        "tool": {
-          "url": "https://cznail.github.io/portfolio-pilot/",
-          "subtitle": "Portfolio Pilot · 资产配置与再平衡",
-          "features": [
-            "大类仓位",
-            "定投规划",
-            "只买入再平衡",
-            "情景压力测试"
-          ],
-          "status": "available"
-        },
-        "image": "/project-icons/portfolio-pilot-b8e04b80cd992ea64d41b71e153bf22917a6df20.svg"
-      },
-      "lastCommitAt": "2026-10-26T00:56:50Z",
-      "recentCommitDates": [
-        "2026-10-26T00:56:50Z",
-        "2026-10-25T08:33:59Z",
-        "2026-10-24T12:27:40Z",
-        "2026-10-23T07:54:43Z",
-        "2026-10-23T07:50:34Z",
-        "2026-10-22T09:25:26Z",
-        "2026-10-21T12:21:17Z",
-        "2026-10-21T01:36:25Z",
-        "2026-10-21T01:10:14Z",
-        "2026-10-20T14:18:13Z",
-        "2026-10-20T14:04:34Z",
-        "2026-10-20T13:23:12Z",
-        "2026-10-20T13:05:03Z",
-        "2026-10-20T12:49:44Z"
-      ]
-    },
-    {
       "name": "totp",
       "url": "https://github.com/czNail/totp",
       "description": "本地二次认证验证器",

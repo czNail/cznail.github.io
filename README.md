@@ -5,7 +5,7 @@
 - 保留灰绿色浅色主题、深色主题、鲨鱼头像与共享导航。
 - 首屏自动推荐博客 RSS 中最新发布的一篇文章；代表作品固定为 PostgreSQL 实验台，不按 Star 或提交活跃度轮换。
 - 首页将项目与工具合并为一个作品区：在线工具优先「打开使用」，同时保留「查看源码」；纯源码作品使用「查看项目」。默认展示四个作品，更多作品使用原生 details 展开。
-- 实验台与仓位助手使用真实界面截图；TOTP、Code Mate 使用紧凑图标。文章区始终使用原有固定书本图案，随深浅色主题适配。
+- 实验台使用真实界面截图；TOTP、Code Mate 使用紧凑图标。文章区始终使用原有固定书本图案，随深浅色主题适配。
 - 访客打开主页或展开工具菜单均不请求 GitHub、不探测工具地址、不轮询、不重新排列内容。
 - 项目目录在推送或手动部署时刷新，文章在每次部署和每小时定时构建时从 RSS 同步；网络异常时使用已验证静态快照。主页菜单直接使用构建时目录，其他站点可按需读取 `/tools.json` 静态文件一次。
 - 保留 `/my-blog/`、`/#projects`、`/#tools`、公众号入口、RSS、键盘导航、减少动效与 404 页面。禁用 JavaScript 时主要内容、工具菜单与作品链接仍可用。
@@ -57,7 +57,7 @@ npm run preview
 
 ### 界面预览
 
-`pg-playground-preview.webp` 来自 PostgreSQL 实验台的临时数据库与内置执行计划示例；`portfolio-pilot-preview.webp` 来自仓位助手的虚构演示，不含用户持仓或账号数据。图片裁去全站导航、版本信息等易变内容，只保留主要操作区。它们是静态展示素材，不随访客访问生成；工具界面发生较大变化时再替换即可。
+`pg-playground-preview.webp` 来自 PostgreSQL 实验台的临时数据库与内置执行计划示例。图片裁去全站导航、版本信息等易变内容，只保留主要操作区。这是静态展示素材，不随访客访问生成；工具界面发生较大变化时再替换即可。
 
 文章展示固定使用 `src/components/BlogArt.astro` 的书本图案，保持约 2.35:1 比例。无需逐篇维护封面。
 
@@ -113,14 +113,14 @@ npm run refresh:posts
 
 ## 共享外观与验证
 
-`packages/site-ui` 是主页、博客、TOTP 与仓位助手的共享视觉来源。其他站点使用带提交版本和 SHA-256 校验的生成副本；浏览器无需加载远程共享脚本。
+`packages/site-ui` 是主页、博客与 TOTP 的共享视觉来源。其他站点使用带提交版本和 SHA-256 校验的生成副本；浏览器无需加载远程共享脚本。
 
 1. 在共享包修改语义颜色、导航或主题行为，更新包版本。
 2. 执行 `node scripts/sync-site-ui.mjs --manifest`、`npm test`、`npm run check`、`npm run build`。
-3. `Shared site visual checks` 工作流将本次共享源码用于四站构建，检查 375/1280px、浅色/深色、导航、菜单、跨站与跨标签主题，并上传截图。
+3. `Shared site visual checks` 工作流将本次共享源码用于三个站点的构建，检查 375/1280px、浅色/深色、导航、菜单、跨站与跨标签主题，并上传截图。
 4. 消费者按原有工作流生成升级 PR，合并后随各站发布；不要手工修改生成副本。
 
-本地跨站检查需要同级的 `homepage`、`my-blog`、`totp`、`portfolio-pilot` 四个仓库。用 `node scripts/sync-site-ui.mjs --from ../homepage` 在消费者加载本地共享源码，各自构建后在主页运行 `npm run test:visual`。截图位于 `artifacts/site-ui`。测试也覆盖主页不请求 GitHub、作品唯一、两个独立操作、静态预览图片加载和无 JavaScript 浏览。
+本地跨站检查需要同级的 `homepage`、`my-blog`、`totp` 三个仓库。用 `node scripts/sync-site-ui.mjs --from ../homepage` 在消费者加载本地共享源码，各自构建后在主页运行 `npm run test:visual`。截图位于 `artifacts/site-ui`。测试也覆盖主页不请求 GitHub、作品唯一、两个独立操作、静态预览图片加载和无 JavaScript 浏览。
 
 [样式预览页](https://cznail.github.io/style-guide/) 集中展示颜色、排版和控件。
 

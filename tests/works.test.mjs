@@ -13,9 +13,9 @@ test('同一作品合并在线入口和源码；未发布的工具保留源码�
   assert.deepEqual(works[1].features, ['TypeScript']);
 });
 test('代表作品顺序不随接口返回顺序或活跃度变化；未知作品按名称排列', () => {
-  const projects = ['z-new','portfolio-pilot','a-new','pg-playground'].map(project);
-  const options = {order:['pg-playground','portfolio-pilot']};
-  const order = ['pg-playground','portfolio-pilot','a-new','z-new'];
+  const projects = ['z-new','totp','a-new','pg-playground'].map(project);
+  const options = {order:['pg-playground','totp']};
+  const order = ['pg-playground','totp','a-new','z-new'];
   assert.deepEqual(createWorks(projects,[],options).map(work=>work.repository),order);
   assert.deepEqual(createWorks(projects.toReversed(),[],options).map(work=>work.repository),order);
 });

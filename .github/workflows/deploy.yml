@@ -32,10 +32,9 @@ jobs:
             src/data/repositories.json
             src/data/posts.json
             public/project-icons/
-          key: catalog-v2-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: catalog-v3-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            catalog-v2-${{ runner.os }}-
-            catalog-v1-${{ runner.os }}-
+            catalog-v3-${{ runner.os }}-
       - run: npm run refresh:repos
         if: github.event_name != 'schedule'
         env:

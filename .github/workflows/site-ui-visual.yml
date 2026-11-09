@@ -29,10 +29,6 @@ jobs:
         with:
           repository: czNail/totp
           path: totp
-      - uses: actions/checkout@v4
-        with:
-          repository: czNail/portfolio-pilot
-          path: portfolio-pilot
       - uses: pnpm/action-setup@v4
         with:
           version: 11.1.2
@@ -42,10 +38,10 @@ jobs:
           node-version: '24'
       - name: Use the current shared source in all consumers
         run: |
-          for app in my-blog totp portfolio-pilot; do
+          for app in my-blog totp; do
             (cd "$app" && node scripts/sync-site-ui.mjs --from ../homepage)
           done
-      - name: Build all four sites
+      - name: Build all three sites
         run: |
           cd homepage
           npm ci
@@ -56,10 +52,6 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm run build
           cd ../totp
-          npm ci
-          npm test
-          npm run build
-          cd ../portfolio-pilot
           npm ci
           npm test
           npm run build

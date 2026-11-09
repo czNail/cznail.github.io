@@ -4,7 +4,7 @@ import { readFile, stat, mkdir } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { chromium } from '@playwright/test';
 
-const roots = { '/my-blog': resolve('../my-blog/dist'), '/totp': resolve('../totp/dist'), '/portfolio-pilot': resolve('../portfolio-pilot/dist'), '': resolve('dist') };
+const roots = { '/my-blog': resolve('../my-blog/dist'), '/totp': resolve('../totp/dist'), '': resolve('dist') };
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.json': 'application/json', '.wasm': 'application/wasm', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.woff2': 'font/woff2' };
 const server = createServer(async (request, response) => {
   try {
@@ -27,7 +27,7 @@ try {
     const context = await browser.newContext({ viewport: { width, height: 960 }, reducedMotion: 'reduce' });
     await context.addInitScript(theme => localStorage.setItem('neil-homepage:theme', theme), theme);
     let reference;
-    for (const path of ['/', '/my-blog/', '/totp/', '/portfolio-pilot/']) {
+    for (const path of ['/', '/my-blog/', '/totp/']) {
       const page = await context.newPage();
       const errors = [];
       const githubRequests = [];
@@ -54,7 +54,9 @@ try {
       await button.click();
       const summary = page.locator('.site-ui-header summary');
       await summary.click();
-      assert.equal(await page.locator('.site-ui-header .tools-popover a').count() >= 3, true);
+      const menu = page.locator('.site-ui-header .tools-popover');
+      await menu.locator('a[href="/totp/"], a[href="https://cznail.github.io/totp/"]').waitFor();
+      assert.equal(await menu.locator('a[href="/#tools"]').isVisible(), true);
       await page.keyboard.press('Escape');
       assert.equal(await page.locator('.site-ui-header details').getAttribute('open'), null);
       await summary.evaluate(element => element.blur());
@@ -105,7 +107,7 @@ try {
   const page = await context.newPage();
   await page.goto(base + '/');
   await page.locator('[data-site-theme]').click();
-  for (const path of ['/my-blog/', '/totp/', '/portfolio-pilot/']) {
+  for (const path of ['/my-blog/', '/totp/']) {
     await page.goto(base + path);
     assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark', `theme lost entering ${path}`);
   }
@@ -122,7 +124,7 @@ try {
   assert.equal(await staticPage.locator('.site-ui-header .tools-popover').isVisible(), true, 'native menu works without JS');
   assert.equal(await staticPage.locator('[data-repository="pg-playground"] .work-primary').getAttribute('href'), 'https://cznail.github.io/pg-playground/');
   await noJS.close();
-  console.log('Four sites: desktop/mobile, light/dark, navigation and cross-tab theme checks passed. Screenshots: artifacts/site-ui');
+  console.log('Three sites: desktop/mobile, light/dark, navigation and cross-tab theme checks passed. Screenshots: artifacts/site-ui');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));

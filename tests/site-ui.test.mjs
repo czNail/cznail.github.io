@@ -15,12 +15,12 @@ function boot(values = {}, denied = false) {
   vm.runInNewContext(source, { document, window, localStorage, getComputedStyle: () => ({ getPropertyValue: () => '' }), setTimeout });
   return { window, document, stored, attributes, handlers, windowHandlers };
 }
-test('canonical preference wins; old tool preference migrates without touching tool data', () => {
-  const legacy = boot({ 'portfolio-pilot:theme': 'dark', 'portfolio-pilot:data': 'keep-me' });
+test('canonical preference wins; old theme preference migrates without touching tool data', () => {
+  const legacy = boot({ theme: 'dark', 'totp:data': 'keep-me' });
   assert.equal(legacy.document.documentElement.dataset.theme, 'dark');
   assert.equal(legacy.stored.get('neil-homepage:theme'), 'dark');
-  assert.equal(legacy.stored.get('portfolio-pilot:data'), 'keep-me');
-  const current = boot({ 'neil-homepage:theme': 'light', 'portfolio-pilot:theme': 'dark' });
+  assert.equal(legacy.stored.get('totp:data'), 'keep-me');
+  const current = boot({ 'neil-homepage:theme': 'light', theme: 'dark' });
   assert.equal(current.document.documentElement.dataset.theme, 'light');
 });
 test('theme remains usable without storage and reflects button accessibility', () => {
