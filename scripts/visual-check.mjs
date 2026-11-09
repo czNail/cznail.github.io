@@ -81,6 +81,26 @@ try {
         const moreWorks = page.locator('[data-catalog-more="projects"]');
         const expandWorks = await moreWorks.isVisible();
         if (expandWorks) await moreWorks.locator('summary').click();
+        const visibleCards = cards.filter({ visible: true });
+        assert.equal(await visibleCards.evaluateAll(elements => elements.every(card =>
+          Math.abs(card.getBoundingClientRect().width - card.parentElement.clientWidth) < 1
+        )), true, 'every work fills its row, including expanded works');
+        if (width === 1280 && theme === 'light') {
+          const rowsStayStable = await page.locator('[data-catalog-preview="projects"]').evaluate(grid => {
+            const first = grid.firstElementChild;
+            const width = first.getBoundingClientRect().width;
+            const extra = first.cloneNode(true);
+            grid.append(extra);
+            let addedWidth;
+            try {
+              addedWidth = [first, extra].map(card => card.getBoundingClientRect().width);
+            } finally {
+              extra.remove();
+            }
+            return addedWidth.every(value => value === width) && first.getBoundingClientRect().width === width;
+          });
+          assert.equal(rowsStayStable, true, 'adding or removing a work keeps the row width');
+        }
         for (const image of await page.locator('.project-preview img:visible, .post-cover img:visible').all()) {
           await image.scrollIntoViewIfNeeded();
           await image.evaluate(element => element.decode());
