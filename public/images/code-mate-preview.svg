@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1106" height="563" viewBox="0 0 1106 563">
+  <rect width="1106" height="563" fill="#e9f0e9"/>
+  <rect x="36" y="36" width="1034" height="491" rx="28" fill="#f8faf6" stroke="#c9d9d1" stroke-width="3"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="81" y="109" fill="#2d7067" font-size="29" font-weight="650" letter-spacing="3">CODE MATE</text>
+    <text x="81" y="178" fill="#203b35" font-size="53" font-weight="700">系统设计评审</text>
+    <g stroke="#c4d8ce" stroke-width="3">
+      <rect x="81" y="231" width="274" height="218" rx="20" fill="#eef4ed"/>
+      <rect x="416" y="231" width="274" height="218" rx="20" fill="#eef4ed"/>
+      <rect x="751" y="231" width="274" height="218" rx="20" fill="#e0eee7"/>
+    </g>
+    <g fill="none" stroke="#50877e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M372 340h26m-11-11 11 11-11 11m320-11h26m-11-11 11 11-11 11"/>
+      <path d="M184 285h67v46h-67zm14 15 8 8-8 8m19 0h19"/>
+      <path d="M527 282h52v52h-52zm13 17h26m-26 17h26"/>
+      <path d="M860 284h55v48h-55zm13 23 10 10 20-20"/>
+    </g>
+    <g fill="#24483f" font-size="37" font-weight="650" text-anchor="middle">
+      <text x="218" y="391">读代码与文档</text>
+      <text x="553" y="391">核对系统约束</text>
+      <text x="888" y="391">明确设计决策</text>
+    </g>
+  </g>
+</svg>

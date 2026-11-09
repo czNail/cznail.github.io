@@ -15,7 +15,7 @@ const primaryUrl = project.toolUrl || project.url;
       {project.features.length > 0 && <ul class="tags" aria-label="主要功能">{project.features.slice(0, 3).map(feature => <li>{feature}</li>)}</ul>}
     </div>
   </div>
-  {project.preview && <div class="project-preview"><img src={project.preview} alt={project.previewAlt || ''} width="1106" height="618" loading="lazy" decoding="async" /></div>}
+  {project.preview && <div class="project-preview"><img src={project.preview} alt={project.previewAlt || ''} width="1106" height="563" loading="lazy" decoding="async" /></div>}
   <div class="project-actions">
     <a class="work-primary" href={primaryUrl} aria-label={`${project.toolUrl ? '打开使用' : '查看项目'}：${project.name}`}>{project.toolUrl ? '打开使用' : '查看项目'} <Icon name="right" size={16}/></a>
     {project.toolUrl && <a class="source-link" href={project.url} aria-label={`查看源码：${project.name}`}>查看源码 <Icon name="arrow" size={14}/></a>}
