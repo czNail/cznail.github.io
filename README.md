@@ -47,7 +47,7 @@ npm run preview
 | `src/lib/works.mjs` | 合并源码与在线入口、应用固定展示顺序 |
 | `src/pages/index.astro` | 首页结构 |
 | `src/styles/global.css` | 主页业务布局、阅读字号与响应式样式 |
-| `packages/site-ui` | 跨站颜色、导航、页脚与主题行为的唯一来源 |
+| `packages/site-ui` | 主页外壳、基础样式与主题脚本 |
 
 目录排除项在 `src/lib/catalog.mjs` 的 `excluded` 中维护，构建同步与缓存快照展示均遵循该配置。
 
@@ -113,7 +113,7 @@ npm run refresh:posts
 
 ## 共享外观与验证
 
-`packages/site-ui` 是主页、博客与 TOTP 的共享视觉来源。其他站点使用带提交版本和 SHA-256 校验的生成副本；浏览器无需加载远程共享脚本。
+`packages/site-ui` 提供主页的导航和页脚，以及可复用的样式变量与主题脚本。博客和工具各自维护导航与版式，通过「返回个人主页」链接回到这里。使用共享基础样式的站点保存带提交版本和 SHA-256 校验的副本，浏览器无需加载远程共享脚本。
 
 1. 在共享包修改语义颜色、导航或主题行为，更新包版本。
 2. 执行 `node scripts/sync-site-ui.mjs --manifest`、`npm test`、`npm run check`、`npm run build`。

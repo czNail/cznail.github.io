@@ -26,7 +26,6 @@ try {
   for (const width of [375, 1280]) for (const theme of ['light', 'dark']) {
     const context = await browser.newContext({ viewport: { width, height: 960 }, reducedMotion: 'reduce' });
     await context.addInitScript(theme => localStorage.setItem('neil-homepage:theme', theme), theme);
-    let reference;
     for (const path of ['/', '/my-blog/', '/totp/']) {
       const page = await context.newPage();
       const errors = [];
@@ -36,31 +35,32 @@ try {
       // Avoid live catalog requests in a deterministic local visual check.
       await page.route('**/api.github.com/**', route => route.abort());
       await page.goto(base + path, { waitUntil: 'networkidle' });
-      await page.locator('.site-ui-header').waitFor();
-      const style = await page.evaluate(() => {
-        const header = document.querySelector('.site-ui-header');
-        const css = getComputedStyle(header);
-        const brand = document.querySelector('.site-ui-brand');
-        return { background: css.backgroundColor, color: css.color, font: css.fontFamily, height: header.getBoundingClientRect().height, brandFont: getComputedStyle(brand).fontSize, brandWeight: getComputedStyle(brand).fontWeight, theme: document.documentElement.dataset.theme, bodyBackground: getComputedStyle(document.body).backgroundColor, bodyColor: getComputedStyle(document.body).color, bodyFont: getComputedStyle(document.body).fontFamily, accent: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(), overflow: document.documentElement.scrollWidth > innerWidth + 1 };
-      });
+      const style = await page.evaluate(() => ({
+        theme: document.documentElement.dataset.theme,
+        overflow: document.documentElement.scrollWidth > innerWidth + 1,
+      }));
       assert.equal(style.theme, theme, `${path}: theme`);
       assert.equal(style.overflow, false, `${path} at ${width}px: horizontal overflow`);
       assert.deepEqual(errors, [], `${path}: browser errors`);
-      if (reference) assert.deepEqual(style, reference, `${path}: shared header differs`);
-      else reference = style;
+      if (path !== '/') {
+        assert.equal(await page.locator('.site-ui-header, .site-ui-footer, .tools-menu').count(), 0, `${path}: homepage navigation`);
+        const home = page.getByRole('link', { name: '返回个人主页', exact: true });
+        assert.equal(await home.count(), 1, `${path}: one return link`);
+        assert.equal(await home.getAttribute('href'), '/');
+      }
       const button = page.locator('[data-site-theme]');
       await button.click();
       assert.equal(await page.locator('html').getAttribute('data-theme'), theme === 'dark' ? 'light' : 'dark');
       await button.click();
-      const summary = page.locator('.site-ui-header summary');
-      await summary.click();
-      const menu = page.locator('.site-ui-header .tools-popover');
-      await menu.locator('a[href="/totp/"], a[href="https://cznail.github.io/totp/"]').waitFor();
-      assert.equal(await menu.locator('a[href="/#tools"]').isVisible(), true);
-      await page.keyboard.press('Escape');
-      assert.equal(await page.locator('.site-ui-header details').getAttribute('open'), null);
-      await summary.evaluate(element => element.blur());
       if (path === '/') {
+        const summary = page.locator('.site-ui-header summary');
+        await summary.click();
+        const menu = page.locator('.site-ui-header .tools-popover');
+        await menu.locator('a[href="/totp/"], a[href="https://cznail.github.io/totp/"]').waitFor();
+        assert.equal(await menu.locator('a[href="/#tools"]').isVisible(), true);
+        await page.keyboard.press('Escape');
+        assert.equal(await page.locator('.site-ui-header details').getAttribute('open'), null);
+        await summary.evaluate(element => element.blur());
         const cards = page.locator('#projects .project-card');
         const repositories = await cards.evaluateAll(elements => elements.map(element => element.dataset.repository));
         assert.equal(new Set(repositories).size, repositories.length, 'a work must only appear once');
@@ -117,6 +117,8 @@ try {
         await page.waitForLoadState('networkidle');
         assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1), false, 'blog article overflow');
+        assert.equal(await page.getByRole('link', { name: '返回个人主页', exact: true }).getAttribute('href'), '/');
+        assert.equal(await page.getByRole('navigation', { name: '博客导航' }).getByRole('link', { name: '搜索' }).isVisible(), true);
         await page.screenshot({ path: 'artifacts/site-ui/blog-article-375-dark.png', fullPage: true });
       }
       await page.close();
